@@ -1,27 +1,49 @@
-// OPEN BASE PROJECT
-// original code: https://blockbuilder.org/noblemillie/c2ab3de8e4b2de7361a23778fcbad9bd
-// codepen: https://codepen.io/marbali8/pen/rNVxBra?editors=1000
-
-import React, { useRef, useEffect } from 'react';
+import React, {useRef, useEffect} from 'react';
 import * as d3 from 'd3';
-import rawdata from '../data/Oscars17.json';
 
-const TimeSlider = ({ height = 180, width = 1000, timeSelected}) => {
+const TimeSlider = ({height = 180, width = 1000, timeSelected, timestepSelected}) => {
 
     //one day for now: Feb 28
-    var range = [0, 24]; // TODO: range needs to be parameterized if we chose to make the user choose the timestep
-    var startTime = "02/28/2017 00:00";
-    var endTime = "02/29/2017 00:00";
-
-    var margin = { left: 100, right: 100 },
-        step = 1,
-        stroke_width = 20;
+    var range = [];
+    const SELECTED_TIMESTEP = timestepSelected;
 
     // state and ref to svg
     const svgRef = useRef();
 
     // called only on first mount to fetch data and set it to state
     useEffect(() => {
+
+        var allRangeValues = [];
+        for (let k = 0; k < 4; k++) {
+            for (let j = 0; j < 24; j++) {
+                for (let i = 0; i < 60; i++) {
+                    allRangeValues[(k * 24 + j) * 60 + i] = (k < 2 ? "02/" + (27 + k) : "03/0" + (-1 + k)) + "/2017 " + (j < 10 ? "0" : "") + j + ":" + (i < 10 ? "0" : "") + i + ":00";
+                }
+            }
+        }
+
+        switch (SELECTED_TIMESTEP) {
+            case "minutes":
+                range = [0, 60 * 24 * 4];
+                break;
+            case "hours":
+                range = [0, 24 * 4];
+                break;
+            case "days":
+                range = [0, 4];
+                break;
+        }
+
+        var rangeValues = [];
+
+        for (let i = 0; i < range[1]; i++) {
+            rangeValues[i] = allRangeValues[i * (allRangeValues.length / range[1])];
+        }
+
+        console.log(rangeValues);
+
+        var margin = {left: 100, right: 100},
+            stroke_width = 20;
 
         // append svg
         var svg = d3.select(svgRef.current)
@@ -39,12 +61,6 @@ const TimeSlider = ({ height = 180, width = 1000, timeSelected}) => {
             .range([0, width - margin.left - margin.right])
             .clamp(true);
 
-        // array useful for step sliders
-        var rangeValues = [];
-        for (let i = 0; i < range[1]; i++) {
-            rangeValues[i] = startTime.substring(0, startTime.length - 2) + (i < 10 ? "0" : "") + i;
-        }
-        console.log(rangeValues);
         var xAxis = d3.axisBottom(xScale).tickValues(rangeValues).tickFormat(function (d) {
             return d;
         });
@@ -68,22 +84,26 @@ const TimeSlider = ({ height = 180, width = 1000, timeSelected}) => {
             .attr('text-anchor', 'middle')
 
         const start = svg.append("text")
-            .attr("font-weight", function () { return 600; })
+            .attr("font-weight", function () {
+                return 600;
+            })
             .attr('x', 50)
             .attr('y', 97)
             .attr('font-size', '16pt')
             .attr('font-family', 'open sans, sans-serif')
             .attr('text-anchor', 'middle')
-            .text("02/28/2017 00:00");
+            .text(rangeValues[0]);
 
         const end = svg.append("text")
-            .attr("font-weight", function () { return 600; })
+            .attr("font-weight", function () {
+                return 600;
+            })
             .attr('x', 950)
             .attr('y', 97)
             .attr('font-size', '16pt')
             .attr('font-family', 'open sans, sans-serif')
             .attr('text-anchor', 'middle')
-            .text('02/29/2017 00:00');
+            .text(rangeValues[rangeValues.length - 1]);
 
 
         // drag handle
@@ -91,6 +111,7 @@ const TimeSlider = ({ height = 180, width = 1000, timeSelected}) => {
             .attr('r', stroke_width / 2)
             .attr('fill', 'rgb(101, 101, 108)')
             .attr('fill', 'black');
+
 
         // bar on top with stroke = transparent and on which the drag behaviour is actually called
         d3.select(slider.node().appendChild(track.node().cloneNode())).attr('class', 'track-overlay')
@@ -110,34 +131,29 @@ const TimeSlider = ({ height = 180, width = 1000, timeSelected}) => {
         // attach the drag handler to the track overlay
         dragHandler(slider.select(".track-overlay"));
 
-        // set default year to max value, corresponds to 2018
-        dragged(1000);
+        // set default year to max value, corresponds to 27/02/2017 23:00:00
+        dragged(200);
 
         function dragged(value) {
-            var x = xScale.invert(value), index = null, midPoint, timeSliderValue;
-            if (step) {
-                // if step has a value, compute the midpoint based on range values and reposition the slider based on the mouse position
-                for (var i = 0; i < rangeValues.length - 1; i++) {
-                    if (x >= i && x <= i + 1) {
-                        index = i;
-                        break;
-                    }
+
+            var x = xScale.invert(value),
+                index = 0,
+                timeSliderValue;
+
+            // if step has a value, compute the midpoint based on range values and reposition the slider based on the mouse position
+            for (var i = 0; i < rangeValues.length; i++) {
+                if (x >= i && x <= i + 1) {
+                    index = i;
+                    break;
                 }
-                midPoint = 0.5;
-                if (x < midPoint) {
-                    timeSliderValue = rangeValues[index];
-                } else {
-                    timeSliderValue = rangeValues[index + 1];
-                }
-            } else {
-                // if step is null or 0, return the drag value as is
-                timeSliderValue = x;
             }
+            timeSliderValue = rangeValues[index];
+
             if (handle.attr('cx') !== xScale(x)) {
                 timeSelected(timeSliderValue);
             }
             handle.attr('cx', xScale(x));
-            text.text(timeSliderValue);
+            text.text(rangeValues[index]);
         }
     }, []);
 

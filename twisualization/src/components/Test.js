@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import * as d3 from 'd3';
 import rawdata from '../data/Oscars17.json';
 
-const Test = ({ timeSelected }) => {
+const Test = ({ timeSelected, timestepSelected}) => {
 
     // state and ref to svg
     const svgRef = useRef();
@@ -13,7 +13,9 @@ const Test = ({ timeSelected }) => {
         // data processing
         var tweets = new Map([]);
 
-        const SELECTED_TIME = timeSelected;//"02/28/2017"; // TODO: add parametrization from TimeSlider
+        const SELECTED_TIMESTEP = timestepSelected;
+        const timeSelected_complete = timeSelected;
+
         var string_timestep;
         var time_units;
 
@@ -21,31 +23,25 @@ const Test = ({ timeSelected }) => {
         var hours = false;
         var minute = true;
 
-        console.log(SELECTED_TIME.length);
-        switch (SELECTED_TIME.length) {
-            case 10: // days
+        switch (SELECTED_TIMESTEP) {
+            case "days":
                 string_timestep = 12;
                 time_units = 24;
                 days = true;
                 break;
-            case 13: // hours
+            case "hours":
                 string_timestep = 15;
                 time_units = 60;
                 hours = true;
                 break;
-            case 16: // minutes
+            case "minutes":
                 string_timestep = 18;
                 time_units = 60;
                 minute = true;
                 break;
         }
 
-        console.log(string_timestep);
-        console.log(time_units);
-
-
-
-        var counter = 0;
+        var SELECTED_TIME = timeSelected_complete.substring(0, string_timestep - 2);
 
         for (let i = 0; i < rawdata.length; i++) {
 
@@ -73,6 +69,8 @@ const Test = ({ timeSelected }) => {
                 }
             }
         }
+
+        console.log("TWEETS")
         console.log(tweets);
 
         var svg_height = 300;
@@ -96,7 +94,7 @@ const Test = ({ timeSelected }) => {
                 .attr('x', x)
                 .attr('y', 10)
                 .attr('width', 2)
-                .attr('height', current_tweetcount / 5)
+                .attr('height', current_tweetcount)
                 .attr('fill', '#1da1f2');
 
             svg.append('text')
