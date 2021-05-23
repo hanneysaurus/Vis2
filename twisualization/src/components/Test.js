@@ -14,7 +14,7 @@ const Test = ({ timeSelected, timestepSelected}) => {
         var tweets = new Map([]);
 
         const SELECTED_TIMESTEP = timestepSelected;
-        const timeSelected_complete = timeSelected;
+        const timeSelected_complete = timeSelected.toString();
 
         var string_timestep;
         var time_units;
@@ -70,8 +70,6 @@ const Test = ({ timeSelected, timestepSelected}) => {
             }
         }
 
-        console.log("TWEETS")
-        console.log(tweets);
 
         var svg_height = 300;
         var svg_width = 500;
@@ -111,7 +109,7 @@ const Test = ({ timeSelected, timestepSelected}) => {
         }
 
 
-    },);
+    },[timeSelected, timestepSelected]);
 
     return <React.Fragment>
         <svg overflow='visible' height={500} width={500} ref={svgRef}/>

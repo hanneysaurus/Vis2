@@ -9,9 +9,8 @@ import useDebounce from '../src/hooks/useDebounce.js';
 function App() {
 
     const [time, setTime] = useState("02/27/2017 23:48:00");
-    const [timestep, setTimestep] = useState("hours");
+    const [timestep, setTimestep] = useState("minutes");
     const debouncedTime = useDebounce(time, 100);
-    //const debouncedTimestep = useDebounce(timestep, 100);
 
     const handleTimeSlider = (time) => {
         setTime(time);
