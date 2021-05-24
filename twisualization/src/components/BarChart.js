@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import * as d3 from 'd3';
 import rawdata from '../data/Oscars17.json';
 
-const Test = ({ timeSelected, timestepSelected}) => {
+const BarChart = ({timeSelected, tweetData, timestepSelected}) => {
 
     // state and ref to svg
     const svgRef = useRef();
@@ -43,28 +43,24 @@ const Test = ({ timeSelected, timestepSelected}) => {
 
         var SELECTED_TIME = timeSelected_complete.substring(0, string_timestep - 2);
 
-        for (let i = 0; i < rawdata.length; i++) {
+        for (let i = 0; i < tweetData.length; i++) {
 
-            var timestamp = rawdata[i].Date.substring(0, string_timestep - 2);
+            var current_timestamp = tweetData[i].Date.substring(0, string_timestep + 1);
 
-            if (timestamp === SELECTED_TIME) {
-
-                var current_timestamp = rawdata[i].Date.substring(0, string_timestep + 1);
-
-                if (tweets.has(current_timestamp)) {
-                    var current_tweetcount = tweets.get(current_timestamp);
-                    tweets.set(current_timestamp, current_tweetcount + 1);
-                } else {
-                    tweets.set(current_timestamp, 1);
-                }
+            if (tweets.has(current_timestamp)) {
+                var current_tweetcount = tweets.get(current_timestamp);
+                tweets.set(current_timestamp, current_tweetcount + 1);
+            } else {
+                tweets.set(current_timestamp, 1);
             }
+
         }
 
         // data preparation, fill in the empty slots
         if (tweets.size < time_units) {
             for (let i = time_units - 1; i >= 0; i--) {
                 var current_timeslot = SELECTED_TIME + (days ? " " : ":") + (i < 10 ? "0" + i : i);
-                if (!tweets.has(current_timeslot)){
+                if (!tweets.has(current_timeslot)) {
                     tweets.set(current_timeslot, 0);
                 }
             }
@@ -82,7 +78,7 @@ const Test = ({ timeSelected, timestepSelected}) => {
         svg.selectAll('rect').remove();
 
         var x = 0;
-        for (let i = 0; i < tweets.size; i++, x+=4) {
+        for (let i = 0; i < tweets.size; i++, x += 4) {
             if (i % 5 === 0) {
                 x += 4;
             }
@@ -109,12 +105,12 @@ const Test = ({ timeSelected, timestepSelected}) => {
         }
 
 
-    },[timeSelected, timestepSelected]);
+    }, [timeSelected, timestepSelected]);
 
     return <React.Fragment>
         <svg overflow='visible' height={500} width={500} ref={svgRef}/>
     </React.Fragment>;
 };
 
-export default Test;
+export default BarChart;
 
