@@ -2,7 +2,7 @@ import React, {useEffect, useRef} from 'react';
 import * as d3 from 'd3';
 
 // time for transition between state changes in milliseconds
-const transitionDuration = 900;
+const transitionDuration = 100;
 
 /** PieChart component that updates everytime a prop changes with a transition animation, takes in a list of data + other optional props
  data prop format example: [{ label: 'FirstObj', color: 'red', value: 1 }, { label: 'SecondObj', color: 'blue', value: 1 }] */
@@ -71,7 +71,7 @@ const PieChart = ({
         addTextInCenter();
 
         d3.selectAll('.top_text')
-            .text('sentiment distribution');
+            .text('sentiment distribution of ' + tweetCount + ' tweets');
 
         didMount.current = true;
 
@@ -122,7 +122,10 @@ const PieChart = ({
                 })
                 .on('mouseenter', function (event, d) {
                     d3.selectAll('.arc').attr("opacity", 0.5);
-                    d3.select(this).attr("opacity", 1.0);
+                    d3.select(this)
+                        .attr("opacity", 1.0)
+                        .append('title')
+                        .text(d.data.value + " tweets");
 
                     d3.selectAll('.center_text')
                         .text(d.data.fractional + " " + d.data.label);
@@ -133,10 +136,11 @@ const PieChart = ({
                     d3.selectAll('.center_text')
                         .text("");
                 })
-                .append('title')
+                /*.append('title')
                 .text(function (d) {
-                    console.log(d.data);
-                    return d.data.value + " tweets"}); //TODO!!!
+                    // TODO: WHY IS VALUE 0 here?
+                    return d.data.value + " tweets"
+                });*/ //TODO!!!
 
             // exit
             arcs.exit().remove();
