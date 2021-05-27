@@ -16,7 +16,8 @@ const DropDown = ({timestepSelected}) => {
             .on('change', function () {
                 var selection = d3.select(this).property("value");
                 timestepSelected(selection);
-            });
+            })
+            .style('cursor', 'pointer');
 
 
         var data = ["minutes", "hours", "days"];

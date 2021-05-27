@@ -209,7 +209,7 @@ const TimeSlider = ({height = 180, width = 1000, timeSelected, tweetData, timest
     }, [SELECTED_TIMESTEP]);
 
 
-    return <div ref={svgRef} height={500} width={500}/>;
+    return <div ref={svgRef} height={height} width={width}/>;
 };
 
 export default TimeSlider;

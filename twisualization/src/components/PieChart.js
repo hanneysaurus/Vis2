@@ -7,7 +7,7 @@ const transitionDuration = 100;
 /** PieChart component that updates everytime a prop changes with a transition animation, takes in a list of data + other optional props
  data prop format example: [{ label: 'FirstObj', color: 'red', value: 1 }, { label: 'SecondObj', color: 'blue', value: 1 }] */
 const PieChart = ({
-                      width = 300, height = 300, tweetData
+                      width = 300, height = 300, tweetData, sentimentSelected
                   }) => {
 
     const outerRadius = (width / 2);
@@ -31,7 +31,7 @@ const PieChart = ({
         var tweetCount = tweetData.length;
 
         for (let i = 0; i < tweetCount; i++) {
-            var currentSentiment = tweetData[i].sentiment_type;
+            var currentSentiment = tweetData[i].Sentiment_Type;
             switch (currentSentiment) {
                 case "POSITIVE":
                     positive_counter++;
@@ -88,7 +88,8 @@ const PieChart = ({
                     .classed('piechart_outer_svg', true)
                     .append('g')
                     .attr('transform', 'translate(' + height / 2 + ' ' + width / 2 + ')')
-                    .classed('piechart_canvas', true);
+                    .classed('piechart_canvas', true)
+                    .style('cursor', 'pointer');
                 addTextAtTop();
 
                 // container for arcs
@@ -136,11 +137,9 @@ const PieChart = ({
                     d3.selectAll('.center_text')
                         .text("");
                 })
-                /*.append('title')
-                .text(function (d) {
-                    // TODO: WHY IS VALUE 0 here?
-                    return d.data.value + " tweets"
-                });*/ //TODO!!!
+                .on('click', function (event, d){
+                    sentimentSelected(d.data.label);
+                })
 
             // exit
             arcs.exit().remove();
