@@ -2,7 +2,7 @@ import React, {useRef, useEffect, useState} from 'react';
 import * as d3 from 'd3';
 import rawdata from '../data/Oscars17.json';
 
-const TimeSlider = ({height = 180, width = 1000, timeSelected, tweetData, timestepSelected}) => {
+const TimeSlider = ({height = 180, width = 900, timeSelected, tweetData, timestepSelected}) => {
 
     var range = [];
     const SELECTED_TIMESTEP = timestepSelected;
@@ -12,18 +12,24 @@ const TimeSlider = ({height = 180, width = 1000, timeSelected, tweetData, timest
 
     var allRangeValues = [];
     var svg;
-    var margin = {left: 100, right: 100},
-        stroke_width = 20;
+    var margin = {left: 100, right: 100};
+    var stroke_width = 20;
+    var toptext_fontsize = 20;
+    var sidetext_fontsize = 16;
+    var cutoff_char = 0;
 
     switch (SELECTED_TIMESTEP) {
         case "minutes":
             range = [0, 60 * 24 * 4];
+            cutoff_char = 16;         //display like this: "02/27/2017 23:48"
             break;
         case "hours":
             range = [0, 24 * 4];
+            cutoff_char = 12;         //display like this: "02/27/2017 23:00"
             break;
         case "days":
             range = [0, 4];
+            cutoff_char = 9;         //display like this: "02/27/2017"
             break;
     }
 
@@ -43,12 +49,15 @@ const TimeSlider = ({height = 180, width = 1000, timeSelected, tweetData, timest
         switch (SELECTED_TIMESTEP) {
             case "minutes":
                 range = [0, 60 * 24 * 4];
+                cutoff_char = 16;         //display like this: "02/27/2017 23:48"
                 break;
             case "hours":
                 range = [0, 24 * 4];
+                cutoff_char = 13;         //display like this: "02/27/2017 23:00"
                 break;
             case "days":
                 range = [0, 4];
+                cutoff_char = 10;         //display like this: "02/27/2017"
                 break;
         }
 
@@ -93,32 +102,25 @@ const TimeSlider = ({height = 180, width = 1000, timeSelected, tweetData, timest
         const text = svg.append("text")
             .attr('class', 'label')
             .attr('x', width / 2)
-            .attr('y', 60)
-            .attr('font-size', '60pt')
-            .attr('font-family', 'open sans, sans-serif')
+            .attr('y', height / 3)
+            .attr('font-size', toptext_fontsize)
             .attr('text-anchor', 'middle')
 
         const start = svg.append("text")
-            .attr("font-weight", function () {
-                return 600;
-            })
-            .attr('x', 50)
-            .attr('y', 97)
-            .attr('font-size', '16pt')
-            .attr('font-family', 'open sans, sans-serif')
-            .attr('text-anchor', 'middle')
-            .text(rangeValues[0]);
+            .attr('x', margin.left)
+            .attr('y', 2 * height/3)
+            .attr('font-size', sidetext_fontsize)
+            .attr('font-width', 'bold')
+            .attr('text-anchor', 'start')
+            .text(rangeValues[0].substring(0, cutoff_char) + (cutoff_char === 13 ? ":00" : ""));
 
         const end = svg.append("text")
-            .attr("font-weight", function () {
-                return 600;
-            })
-            .attr('x', 950)
-            .attr('y', 97)
-            .attr('font-size', '16pt')
-            .attr('font-family', 'open sans, sans-serif')
-            .attr('text-anchor', 'middle')
-            .text(rangeValues[rangeValues.length - 1]);
+            .attr('x', width - margin.right)
+            .attr('y', 2 * height/3)
+            .attr('font-size', sidetext_fontsize)
+            .attr('font-width', 'bold')
+            .attr('text-anchor', 'end')
+            .text(rangeValues[rangeValues.length - 1].substring(0, cutoff_char) + (cutoff_char === 13 ? ":00" : ""));
 
 
         // drag handle
@@ -147,7 +149,7 @@ const TimeSlider = ({height = 180, width = 1000, timeSelected, tweetData, timest
         dragHandler(slider.select(".track-overlay"));
 
         // set default year to max value, corresponds to 27/02/2017 23:00:00
-        dragged(200, range);
+        dragged(175, range);
 
         function dragged(value) {
 
@@ -156,7 +158,7 @@ const TimeSlider = ({height = 180, width = 1000, timeSelected, tweetData, timest
                 timeSliderValue;
 
             // if step has a value, compute the midpoint based on range values and reposition the slider based on the mouse position
-            for (var i = 0; i < rangeValues.length; i++) {
+            for (var i = 0; i < range[1]; i++) {
                 if (x >= i && x <= i + 1) {
                     index = i;
                     break;
@@ -169,7 +171,7 @@ const TimeSlider = ({height = 180, width = 1000, timeSelected, tweetData, timest
                 fetchData(timeSliderValue);
             }
             handle.attr('cx', xScale(x));
-            text.text(rangeValues[index]);
+            text.text(rangeValues[index].substring(0, cutoff_char) + (cutoff_char === 13 ? ":00" : ""));
 
         }
 

@@ -10,8 +10,10 @@ const PieChart = ({
                       width = 300, height = 300, tweetData, sentimentSelected
                   }) => {
 
-    const outerRadius = (width / 2);
+    const outerRadius = 100;
     const innerRadius = outerRadius / 3;
+    const fontsize = 16;
+    const center_fontsize = 14;
 
     const svgRef = useRef();
     const didMount = useRef(false);
@@ -139,6 +141,7 @@ const PieChart = ({
                 })
                 .on('click', function (event, d){
                     sentimentSelected(d.data.label);
+                    //TODO: make selection stay in piechart
                 })
 
             // exit
@@ -154,9 +157,10 @@ const PieChart = ({
             top_text
                 .enter().append('text')
                 .attr('x', width / 2)
-                .attr('y', 20)
+                .attr('y', (height - 2 * outerRadius) / 2 - fontsize)
                 .attr('class', 'top_text')
                 .style('text-anchor', 'middle')
+                .style('font-size', fontsize)
                 .text("");
 
             top_text.exit().remove();
@@ -171,9 +175,10 @@ const PieChart = ({
             center_text
                 .enter().append('text')
                 .attr('x', width / 2)
-                .attr('y', height / 2 + 12)
+                .attr('y', height / 2 + center_fontsize/2)
                 .attr('class', 'center_text')
                 .style('text-anchor', 'middle')
+                .style('font-size', center_fontsize)
                 .text("");
 
             center_text.exit().remove();

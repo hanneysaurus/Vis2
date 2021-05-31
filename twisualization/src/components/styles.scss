@@ -1,5 +1,9 @@
+body {
+  font-family: "Helvetica Neue", sans-serif; //this is the font twitter uses
+}
+
 .TweetView {
-  width: 500px;
+  width: 425px;
   height: 500px;
   display: block;
   overflow-y: scroll;

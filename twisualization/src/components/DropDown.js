@@ -20,7 +20,7 @@ const DropDown = ({timestepSelected}) => {
             .style('cursor', 'pointer');
 
 
-        var data = ["minutes", "hours", "days"];
+        var data = ["days", "hours", "minutes"];
         var dropdown = svg.selectAll("option")
             .data(data)
             .enter()
@@ -30,7 +30,8 @@ const DropDown = ({timestepSelected}) => {
             })
             .attr("value", function (d) {
                 return d;
-            });
+            })
+            .property("selected", function(d){ return d === "days"; });
 
     }, []);
     return <div ref={svgRef} height={200} width={200}/>;

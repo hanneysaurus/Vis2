@@ -7,7 +7,8 @@ const TweetView = ({tweetData, sentimentSelected}) => {
     var didMount = useRef(false);
 
     const SELECTED_SENTIMENT = sentimentSelected.toString().toUpperCase();
-    const displayTweetAmount = 50;
+    const displayTweetAmount = 10; //TODO: let the user choose how many tweets they want to display and add the amount
+                                    // shown to the div in form of "showing X tweets with _____ sentiment"
 
     useEffect(() => {
 
@@ -28,32 +29,17 @@ const TweetView = ({tweetData, sentimentSelected}) => {
         var svg_height = 500;
         var svg_width = 400;
         var container = d3.selectAll('.tweetViewContainer');
-        var preview_height = 100;
         var preview_fontsize = 14;
         var preview_fav_fontsize = 10;
-        var preview_width = svg_width - 4 * margin.side;
+        var preview_height = 100 + 2 * margin.side;
+        var preview_width = svg_width + 2 * margin.side;
+        var container_height = preview_height - 2 * margin.side;
+        var container_width = preview_width - 2 * margin.side;
 
         if (!didMount.current) {
             div = d3.select(divRef.current)
-                .attr('width', '500px')
-                .attr('height', '500px')
-            //.attr('overflow-y', 'scroll');
-
-            // container
-            /*div.append('svg').append('rect')
                 .attr('width', svg_width)
                 .attr('height', svg_height)
-                .attr('class', 'tweetViewContainer')
-                .attr('fill', 'white')
-                .style('stroke', 'black')
-                .style('stroke-width', 7);*/
-
-            /*var scrollable = div.append('g')
-                .attr('class', 'scrollable')
-                .attr('width', svg_width)
-                .attr('height', svg_height)
-                .attr('x', 0)
-                .attr('y', 0);*/
 
             for (let i = 0; i < displayTweetAmount; i++) {
 
@@ -64,20 +50,19 @@ const TweetView = ({tweetData, sentimentSelected}) => {
                     .attr('y', 0)
                     .attr('width', preview_width)
                     .attr('height', preview_height)
-                    //.attr('transform', 'translate(' + margin.side + ', ' + margin.top + ')')
                     .style('cursor', 'pointer');
 
                 var tweetcontainer = tweetview.append('rect')
                     .attr('class', 'tweetpreview_container' + i)
-                    .attr('width', preview_width)
-                    .attr('height', preview_height)
+                    .attr('width', container_width)
+                    .attr('height', container_height)
                     .attr('x', margin.side)
-                    .attr('y', margin.top);//+ i * (preview_height + margin.preview));
+                    .attr('y', margin.top);
 
                 var tweetFullname = tweetview.append('text')
                     .attr('class', 'tweetpreview_fullname' + i)
                     .attr('x', margin.preview)
-                    .attr('y', /*(i * (preview_height + margin.preview)) + */(margin.preview + preview_fontsize))
+                    .attr('y', (margin.preview + preview_fontsize))
                     .attr('font-size', preview_fontsize)
                     .attr('font-weight', 'bold')
                     .style('text-anchor', 'start');
@@ -85,21 +70,21 @@ const TweetView = ({tweetData, sentimentSelected}) => {
                 var tweetScreenname = tweetview.append('text')
                     .attr('class', 'tweetpreview_screenname' + i)
                     .attr('x', margin.preview)
-                    .attr('y', /*(i * (preview_height + margin.preview)) + */(margin.preview + preview_fontsize))
+                    .attr('y', margin.preview + preview_fontsize)
                     .attr('font-size', preview_fontsize)
                     .style('text-anchor', 'start');
 
                 var tweetContent = tweetview.append('text')
                     .attr('class', 'tweetpreview_tweettext' + i)
                     .attr('x', 2 * margin.preview)
-                    .attr('y', /*(i * (preview_height + margin.preview)) + */(2 * margin.preview + 2 * preview_fontsize))
+                    .attr('y', 2 * margin.preview + 2 * preview_fontsize)
                     .attr('font-size', preview_fontsize)
                     .style('text-anchor', 'start');
 
                 var tweetFavsAndRTs = tweetview.append('text')
                     .attr('class', 'tweetpreview_tweetfavs' + i)
-                    .attr('x', preview_width - margin.preview)
-                    .attr('y', /*(i * (preview_height + margin.preview)) +*/ (preview_height - margin.preview + preview_fav_fontsize / 2))
+                    .attr('x', container_width - margin.preview)
+                    .attr('y', container_height - margin.preview + preview_fav_fontsize / 2)
                     .style('font-size', preview_fav_fontsize)
                     .style('text-anchor', 'end');
             }
@@ -202,8 +187,6 @@ const TweetView = ({tweetData, sentimentSelected}) => {
 
         }
 
-        //setScrollable();
-
 
         didMount.current = true;
 
@@ -239,7 +222,7 @@ const TweetView = ({tweetData, sentimentSelected}) => {
         }
 
 
-    }, [sentimentSelected]);
+    }, [tweetData, sentimentSelected]);
 
     return <React.Fragment>
         <div className="TweetView" ref={divRef}/>

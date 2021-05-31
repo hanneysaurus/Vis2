@@ -12,7 +12,7 @@ function App() {
 
     const [time, setTime] = useState("02/27/2017 23:48:00");
     const [tweets, setTweets] = useState([]);
-    const [timestep, setTimestep] = useState("minutes");
+    const [timestep, setTimestep] = useState("days");
     const [sentiment, setSentiment] = useState("");
     const debouncedTime = useDebounce(time, 100);
 
@@ -34,21 +34,29 @@ function App() {
 
     return (
         <div className={stylesheet}>
-            <div>
-                <BarChart timeSelected={debouncedTime} tweetData={tweets} timestepSelected={timestep}/>
-            </div>
-            <div>
-                <TimeSlider timeSelected={handleTimeSlider_Time} tweetData={handleTimeSlider_Data}
-                            timestepSelected={timestep}/>
-            </div>
-            <div>
-                <DropDown timestepSelected={handleDropDown}/>
-            </div>
-            <div>
-                <PieChart tweetData={tweets} sentimentSelected={handlePieChart}/>
-            </div>
-            <div>
-                <TweetView id="tweetpreviewcontainer" tweetData={tweets} sentimentSelected={sentiment}/>
+            <div style={{display: 'flex', flexDirection: 'row'}}>
+                <div style={{display: 'flex', flexDirection: 'column'}}>
+                    <div>
+                        <DropDown timestepSelected={handleDropDown}/>
+                    </div>
+                    <div>
+                        <TimeSlider timeSelected={handleTimeSlider_Time} tweetData={handleTimeSlider_Data}
+                                    timestepSelected={timestep}/>
+                    </div>
+                </div>
+                <div style={{display: 'flex', flexDirection: 'column'}}>
+                    <div>
+                        <BarChart timeSelected={debouncedTime} tweetData={tweets} timestepSelected={timestep}/>
+                    </div>
+                    <div style={{display: 'flex', flexDirection: 'row'}}>
+                        <div>
+                            <PieChart tweetData={tweets} sentimentSelected={handlePieChart}/>
+                        </div>
+                        <div>
+                            <TweetView id="tweetpreviewcontainer" tweetData={tweets} sentimentSelected={sentiment}/>
+                        </div>
+                    </div>
+                </div>
             </div>
 
         </div>
