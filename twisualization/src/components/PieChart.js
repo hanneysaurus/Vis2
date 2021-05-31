@@ -14,6 +14,7 @@ const PieChart = ({
     const innerRadius = outerRadius / 3;
     const fontsize = 16;
     const center_fontsize = 14;
+    var isSentimentSelected = false;
 
     const svgRef = useRef();
     const didMount = useRef(false);
@@ -57,13 +58,13 @@ const PieChart = ({
             {
                 label: "neutral",
                 value: neutral_counter,
-                color: 'lightblue',
+                color: 'floralwhite',
                 fractional: (Math.round((neutral_counter / tweetCount) * 100)) + '%'
             },
             {
                 label: "negative",
                 value: negative_counter,
-                color: 'red',
+                color: 'lightcoral',
                 fractional: (Math.round((negative_counter / tweetCount) * 100)) + '%'
             }
         ];
@@ -124,24 +125,39 @@ const PieChart = ({
                     this._current = d;
                 })
                 .on('mouseenter', function (event, d) {
-                    d3.selectAll('.arc').attr("opacity", 0.5);
-                    d3.select(this)
-                        .attr("opacity", 1.0)
-                        .append('title')
-                        .text(d.data.value + " tweets");
+                    if (!isSentimentSelected) {
+                        d3.selectAll('.arc').attr("opacity", 0.5);
+                        d3.select(this)
+                            .attr("opacity", 1.0)
+                            .append('title')
+                            .text(d.data.value + " tweets");
 
-                    d3.selectAll('.center_text')
-                        .text(d.data.fractional + " " + d.data.label);
-
+                        d3.selectAll('.center_text')
+                            .text(d.data.fractional + " " + d.data.label);
+                    }
                 })
                 .on('mouseleave', function (d) {
-                    d3.selectAll('.arc').attr("opacity", 1.0);
-                    d3.selectAll('.center_text')
-                        .text("");
+                    if (!isSentimentSelected) {
+                        d3.selectAll('.arc').attr("opacity", 1.0);
+                        d3.selectAll('.center_text')
+                            .text("");
+                    }
                 })
-                .on('click', function (event, d){
-                    sentimentSelected(d.data.label);
-                    //TODO: make selection stay in piechart
+                .on('click', function (event, d) {
+                    if (!isSentimentSelected){
+                        d3.selectAll('.arc').attr("opacity", 0.5);
+                        d3.select(this)
+                            .attr("opacity", 1.0)
+                            .append('title')
+                            .text(d.data.value + " tweets");
+
+                        d3.selectAll('.center_text')
+                            .text(d.data.fractional + " " + d.data.label);
+                        sentimentSelected(d.data.label);
+                        isSentimentSelected = true;
+                    } else {
+                        isSentimentSelected = false;
+                    }
                 })
 
             // exit
@@ -175,7 +191,7 @@ const PieChart = ({
             center_text
                 .enter().append('text')
                 .attr('x', width / 2)
-                .attr('y', height / 2 + center_fontsize/2)
+                .attr('y', height / 2 + center_fontsize / 2)
                 .attr('class', 'center_text')
                 .style('text-anchor', 'middle')
                 .style('font-size', center_fontsize)

@@ -11,8 +11,7 @@ const DropDown = ({timestepSelected}) => {
 
         var svg = d3.select(svgRef.current)
             .append('select')
-            .attr("class", "selection")
-            .attr("name", "timestep")
+            .attr('class', 'selection')
             .on('change', function () {
                 var selection = d3.select(this).property("value");
                 timestepSelected(selection);
@@ -34,7 +33,7 @@ const DropDown = ({timestepSelected}) => {
             .property("selected", function(d){ return d === "days"; });
 
     }, []);
-    return <div ref={svgRef} height={200} width={200}/>;
+    return <div className="DropDown" ref={svgRef} height={200} width={200}/>;
 }
 
 export default DropDown;

@@ -5,7 +5,6 @@ const BarChart = ({width = 700, height = 250, timeSelected, tweetData, timestepS
 
     // state and ref to svg
     const svgRef = useRef();
-    var didMount = useRef(false);
 
     // code runs only if data has been fetched
     useEffect(() => {
@@ -74,6 +73,7 @@ const BarChart = ({width = 700, height = 250, timeSelected, tweetData, timestepS
         svg.selectAll('rect').remove();
         svg.selectAll('line').remove();
 
+        var barchart_height = height - 20;
         var fontsize = 12;
         var space_between_bars = 4;
         var wide_space_between_bars = 2 * space_between_bars;
@@ -101,12 +101,15 @@ const BarChart = ({width = 700, height = 250, timeSelected, tweetData, timestepS
             }
             var index = SELECTED_TIME + (days ? " " : ":") + (i < 10 ? "0" + i : i);
             current_tweetcount = tweets.get(index);
-            var bar_height = ((current_tweetcount - min_tweets) / (max_tweets - min_tweets)) * height;
+            var bar_height = ((current_tweetcount - min_tweets) / (max_tweets - min_tweets)) * barchart_height;
+            if (Number.isNaN(bar_height)){  // this fixes the weird NaN error
+                bar_height = 0;
+            }
 
             // bars
             svg.append('rect')
                 .attr('x', x)
-                .attr('y', (height - bar_height))
+                .attr('y', (barchart_height - bar_height))
                 .attr('width', bar_width)
                 .attr('height', bar_height)
                 .attr('fill', '#1da1f2')
@@ -116,11 +119,12 @@ const BarChart = ({width = 700, height = 250, timeSelected, tweetData, timestepS
             // times
             svg.append('text')
                 .attr('x', x + (bar_width / 2))
-                .attr('y', height + fontsize)
+                .attr('y', height - fontsize/2)
                 .attr('font-size', fontsize)
+                .attr('font-weight', 'bold')
                 .attr('text-anchor', 'middle')
                 .text(function (d) {
-                    return days ? (i % 3 === 0 ? i : "") : (i % 5 === 0 ? i : "");
+                    return (days ? (i % 3 === 0 ? (i + ":00") : "") : (i % 5 === 0 ? (i + ":00") : ""));
                 });
         }
 
@@ -143,23 +147,24 @@ const BarChart = ({width = 700, height = 250, timeSelected, tweetData, timestepS
         }
 
         var partition = Math.ceil(max_tweets / line_step);
-        var line_height = (line_step * height) / max_tweets;
+        var line_height = (line_step * barchart_height) / max_tweets;
         for (let i = 1; i <= partition; i++) {
 
             svg.append('line')
                 .attr('x1', 0)
                 .attr('x2', width)
-                .attr('y1', height - ((partition - i) * line_height))
-                .attr('y2', height - ((partition - i) * line_height))
+                .attr('y1', barchart_height - ((partition - i) * line_height))
+                .attr('y2', barchart_height - ((partition - i) * line_height))
                 .style('stroke-dasharray', '3,3')//dashed array for line
                 .style('stroke', 'dimgrey');
 
             svg.append('text')
                 .attr('x', 0)
-                .attr('y', height - ((partition - i) * line_height + 2))
+                .attr('y', barchart_height - ((partition - i) * line_height + 2))
                 .attr('font-size', fontsize)
                 .text((partition - i) * line_step);
         }
+
 
         return () => {
             svg.selectAll("svg").exit().remove();
@@ -169,7 +174,7 @@ const BarChart = ({width = 700, height = 250, timeSelected, tweetData, timestepS
     }, [timeSelected, timestepSelected]);
 
     return <React.Fragment>
-        <svg overflow="visible" height={height} width={width} ref={svgRef}/>
+        <svg className="BarChart" height={height} width={width} ref={svgRef}/>
     </React.Fragment>;
 };
 

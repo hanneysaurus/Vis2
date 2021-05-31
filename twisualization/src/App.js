@@ -8,6 +8,8 @@ import TweetView from "./components/TweetView.js";
 import stylesheet from './components/styles.scss';
 import useDebounce from '../src/hooks/useDebounce.js';
 
+import {FaTwitter} from 'react-icons/fa';
+
 function App() {
 
     const [time, setTime] = useState("02/27/2017 23:48:00");
@@ -34,6 +36,9 @@ function App() {
 
     return (
         <div className={stylesheet}>
+            <h1 style={{textAlign: 'center', color: '#1da1f2'}}>
+                The Oscar Incident 2017 - A Visualization of the Twitter Data <FaTwitter className="twittericon" onClick={gotoTwitter}/>
+            </h1>
             <div style={{display: 'flex', flexDirection: 'row'}}>
                 <div style={{display: 'flex', flexDirection: 'column'}}>
                     <div>
@@ -52,7 +57,7 @@ function App() {
                         <div>
                             <PieChart tweetData={tweets} sentimentSelected={handlePieChart}/>
                         </div>
-                        <div>
+                        <div style={{paddingTop: '15px'}}>
                             <TweetView id="tweetpreviewcontainer" tweetData={tweets} sentimentSelected={sentiment}/>
                         </div>
                     </div>
@@ -63,4 +68,7 @@ function App() {
     );
 }
 
+function gotoTwitter(){
+    window.open("https://twitter.com", "_blank");
+}
 export default App;

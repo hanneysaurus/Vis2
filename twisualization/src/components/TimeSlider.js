@@ -2,7 +2,7 @@ import React, {useRef, useEffect, useState} from 'react';
 import * as d3 from 'd3';
 import rawdata from '../data/Oscars17.json';
 
-const TimeSlider = ({height = 180, width = 900, timeSelected, tweetData, timestepSelected}) => {
+const TimeSlider = ({height = 180, width = 700, timeSelected, tweetData, timestepSelected}) => {
 
     var range = [];
     const SELECTED_TIMESTEP = timestepSelected;
@@ -12,9 +12,9 @@ const TimeSlider = ({height = 180, width = 900, timeSelected, tweetData, timeste
 
     var allRangeValues = [];
     var svg;
-    var margin = {left: 100, right: 100};
+    var margin = {left: 10, right: 10};
     var stroke_width = 20;
-    var toptext_fontsize = 20;
+    var toptext_fontsize = 24;
     var sidetext_fontsize = 16;
     var cutoff_char = 0;
 
@@ -104,6 +104,7 @@ const TimeSlider = ({height = 180, width = 900, timeSelected, tweetData, timeste
             .attr('x', width / 2)
             .attr('y', height / 3)
             .attr('font-size', toptext_fontsize)
+            .attr('font-weight', 'bold')
             .attr('text-anchor', 'middle')
 
         const start = svg.append("text")
@@ -126,8 +127,8 @@ const TimeSlider = ({height = 180, width = 900, timeSelected, tweetData, timeste
         // drag handle
         var handle = slider.append('circle').classed('handle', true)
             .attr('r', stroke_width / 2)
-            .attr('fill', 'rgb(101, 101, 108)')
-            .attr('fill', 'black');
+            .attr('fill', '#1da1f244')
+            .attr('stroke', '#1da1f2');
 
 
         // bar on top with stroke = transparent and on which the drag behaviour is actually called
@@ -148,8 +149,8 @@ const TimeSlider = ({height = 180, width = 900, timeSelected, tweetData, timeste
         // attach the drag handler to the track overlay
         dragHandler(slider.select(".track-overlay"));
 
-        // set default year to max value, corresponds to 27/02/2017 23:00:00
-        dragged(175, range);
+        // set default year to max value, corresponds to 27/02/2017 23:59:00
+        dragged(170, range);
 
         function dragged(value) {
 
@@ -211,7 +212,7 @@ const TimeSlider = ({height = 180, width = 900, timeSelected, tweetData, timeste
     }, [SELECTED_TIMESTEP]);
 
 
-    return <div ref={svgRef} height={height} width={width}/>;
+    return <div className="TimeSlider" ref={svgRef} height={height} width={width}/>;
 };
 
 export default TimeSlider;

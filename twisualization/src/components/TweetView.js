@@ -8,7 +8,9 @@ const TweetView = ({tweetData, sentimentSelected}) => {
 
     const SELECTED_SENTIMENT = sentimentSelected.toString().toUpperCase();
     const displayTweetAmount = 10; //TODO: let the user choose how many tweets they want to display and add the amount
-                                    // shown to the div in form of "showing X tweets with _____ sentiment"
+    // shown to the div in form of "showing X tweets with _____ sentiment"
+    //TODO: sort bynumber of likes or retweets
+//    https://stackoverflow.com/questions/31158902/is-it-possible-to-sort-a-es6-map-object
 
     useEffect(() => {
 
@@ -49,15 +51,16 @@ const TweetView = ({tweetData, sentimentSelected}) => {
                     .attr('x', 0)
                     .attr('y', 0)
                     .attr('width', preview_width)
-                    .attr('height', preview_height)
-                    .style('cursor', 'pointer');
+                    .attr('height', preview_height);
 
                 var tweetcontainer = tweetview.append('rect')
                     .attr('class', 'tweetpreview_container' + i)
                     .attr('width', container_width)
                     .attr('height', container_height)
                     .attr('x', margin.side)
-                    .attr('y', margin.top);
+                    .attr('y', margin.top)
+                    .attr('rx', 10)
+                    .attr('ry', 10);
 
                 var tweetFullname = tweetview.append('text')
                     .attr('class', 'tweetpreview_fullname' + i)
@@ -98,10 +101,10 @@ const TweetView = ({tweetData, sentimentSelected}) => {
                 divRef.current.style.borderColor = 'lightgreen';
                 break;
             case "NEUTRAL":
-                divRef.current.style.borderColor = 'lightblue';
+                divRef.current.style.borderColor = 'cornsilk';
                 break;
             case "NEGATIVE":
-                divRef.current.style.borderColor = 'red';
+                divRef.current.style.borderColor = 'lightcoral';
                 break;
             default:
                 divRef.current.style.borderColor = 'dimgrey';
@@ -115,17 +118,18 @@ const TweetView = ({tweetData, sentimentSelected}) => {
                 .style('fill', function () {
                     var tweet = currentSentimentTweets[i];
                     if (tweet !== undefined) {
-                        return '#1da1f244';
+                        return '#1da1f211';
                     }
                     return 'white';
                 })
                 .style('stroke', function () {
                     var tweet = currentSentimentTweets[i];
                     if (tweet !== undefined) {
-                        return 'darkgrey';
+                        return '#1da1f2';
                     }
                     return 'white';
-                });
+                })
+                .style('stroke-width', 1.5);
 
 
             // set onclick function of a preview that leads to the original tweet
@@ -135,6 +139,24 @@ const TweetView = ({tweetData, sentimentSelected}) => {
                     if (tweet !== undefined) {
                         var url = "http://twitter.com/" + tweet.Screen_Name + "/status/" + tweet.Tweet_ID;
                         window.open(url, "_blank");
+                    }
+                })
+                .on('mouseenter', function () {
+                    var tweet = currentSentimentTweets[i];
+                    if (tweet !== undefined) {
+                        d3.selectAll('.tweetpreview_container' + i).style('fill', '#1da1f255');
+                    }
+                })
+                .on('mouseleave', function () {
+                    var tweet = currentSentimentTweets[i];
+                    if (tweet !== undefined) {
+                        d3.selectAll('.tweetpreview_container' + i).style('fill', '#1da1f211');
+                    }
+                })
+                .style('cursor', function (){
+                    var tweet = currentSentimentTweets[i];
+                    if (tweet !== undefined) {
+                        return 'pointer';
                     }
                 })
 
@@ -184,7 +206,6 @@ const TweetView = ({tweetData, sentimentSelected}) => {
                     }
                     return "";
                 })
-
         }
 
 
