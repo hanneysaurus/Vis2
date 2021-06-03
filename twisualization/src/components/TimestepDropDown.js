@@ -1,17 +1,17 @@
 import React, {useEffect, useRef, useState} from 'react';
 import * as d3 from 'd3';
 
-const DropDown = ({timestepSelected}) => {
+const TimestepDropDown = ({timestepSelected}) => {
 
     const svgRef = useRef();
 
     useEffect(() => {
 
-        d3.selectAll('.selection').remove();
+        d3.selectAll('.timestep_selection').remove();
 
         var svg = d3.select(svgRef.current)
             .append('select')
-            .attr('class', 'selection')
+            .attr('class', 'timestep_selection')
             .on('change', function () {
                 var selection = d3.select(this).property("value");
                 timestepSelected(selection);
@@ -33,7 +33,7 @@ const DropDown = ({timestepSelected}) => {
             .property("selected", function(d){ return d === "days"; });
 
     }, []);
-    return <div className="DropDown" ref={svgRef} height={200} width={200}/>;
+    return <div className="TimestepDropDown" ref={svgRef} height={200} width={200}/>;
 }
 
-export default DropDown;
+export default TimestepDropDown;

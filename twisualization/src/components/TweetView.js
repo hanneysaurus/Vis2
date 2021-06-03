@@ -1,15 +1,15 @@
 import React, {useEffect, useRef} from 'react';
 import * as d3 from 'd3';
 
-const TweetView = ({tweetData, sentimentSelected}) => {
+const TweetView = ({tweetData, sentimentSelected, tweetAmountShown}) => {
 
     const divRef = useRef();
     var didMount = useRef(false);
 
     const SELECTED_SENTIMENT = sentimentSelected.toString().toUpperCase();
-    const displayTweetAmount = 10; //TODO: let the user choose how many tweets they want to display and add the amount
+    const displayTweetAmount = tweetAmountShown; //TODO: display and add the amount
     // shown to the div in form of "showing X tweets with _____ sentiment"
-    //TODO: sort bynumber of likes or retweets
+    //TODO: sort by number of likes or retweets
 //    https://stackoverflow.com/questions/31158902/is-it-possible-to-sort-a-es6-map-object
 
     useEffect(() => {
@@ -28,9 +28,9 @@ const TweetView = ({tweetData, sentimentSelected}) => {
         const margin = {side: 5, top: 5, preview: 10}
 
         var div;
+        var tweetview_group
         var svg_height = 500;
         var svg_width = 400;
-        var container = d3.selectAll('.tweetViewContainer');
         var preview_fontsize = 14;
         var preview_fav_fontsize = 10;
         var preview_height = 100 + 2 * margin.side;
@@ -38,59 +38,61 @@ const TweetView = ({tweetData, sentimentSelected}) => {
         var container_height = preview_height - 2 * margin.side;
         var container_width = preview_width - 2 * margin.side;
 
-        if (!didMount.current) {
-            div = d3.select(divRef.current)
-                .attr('width', svg_width)
-                .attr('height', svg_height)
+        d3.selectAll('.tweetview_group').remove();
 
-            for (let i = 0; i < displayTweetAmount; i++) {
+        div = d3.select(divRef.current)
+            .attr('width', svg_width)
+            .attr('height', svg_height)
 
-                // tweet preview
-                var tweetview = div.append('svg')
-                    .attr('class', 'tweetview' + i)
-                    .attr('x', 0)
-                    .attr('y', 0)
-                    .attr('width', preview_width)
-                    .attr('height', preview_height);
+        tweetview_group = div.append('g').attr('class', 'tweetview_group');
 
-                var tweetcontainer = tweetview.append('rect')
-                    .attr('class', 'tweetpreview_container' + i)
-                    .attr('width', container_width)
-                    .attr('height', container_height)
-                    .attr('x', margin.side)
-                    .attr('y', margin.top)
-                    .attr('rx', 10)
-                    .attr('ry', 10);
+        for (let i = 0; i < displayTweetAmount; i++) {
 
-                var tweetFullname = tweetview.append('text')
-                    .attr('class', 'tweetpreview_fullname' + i)
-                    .attr('x', margin.preview)
-                    .attr('y', (margin.preview + preview_fontsize))
-                    .attr('font-size', preview_fontsize)
-                    .attr('font-weight', 'bold')
-                    .style('text-anchor', 'start');
+            // tweet preview
+            var tweetview = tweetview_group.append('svg')
+                .attr('class', 'tweetview' + i)
+                .attr('x', 0)
+                .attr('y', 0)
+                .attr('width', preview_width)
+                .attr('height', preview_height);
 
-                var tweetScreenname = tweetview.append('text')
-                    .attr('class', 'tweetpreview_screenname' + i)
-                    .attr('x', margin.preview)
-                    .attr('y', margin.preview + preview_fontsize)
-                    .attr('font-size', preview_fontsize)
-                    .style('text-anchor', 'start');
+            var tweetcontainer = tweetview.append('rect')
+                .attr('class', 'tweetpreview_container' + i)
+                .attr('width', container_width)
+                .attr('height', container_height)
+                .attr('x', margin.side)
+                .attr('y', margin.top)
+                .attr('rx', 10)
+                .attr('ry', 10);
 
-                var tweetContent = tweetview.append('text')
-                    .attr('class', 'tweetpreview_tweettext' + i)
-                    .attr('x', 2 * margin.preview)
-                    .attr('y', 2 * margin.preview + 2 * preview_fontsize)
-                    .attr('font-size', preview_fontsize)
-                    .style('text-anchor', 'start');
+            var tweetFullname = tweetview.append('text')
+                .attr('class', 'tweetpreview_fullname' + i)
+                .attr('x', margin.preview)
+                .attr('y', (margin.preview + preview_fontsize))
+                .attr('font-size', preview_fontsize)
+                .attr('font-weight', 'bold')
+                .style('text-anchor', 'start');
 
-                var tweetFavsAndRTs = tweetview.append('text')
-                    .attr('class', 'tweetpreview_tweetfavs' + i)
-                    .attr('x', container_width - margin.preview)
-                    .attr('y', container_height - margin.preview + preview_fav_fontsize / 2)
-                    .style('font-size', preview_fav_fontsize)
-                    .style('text-anchor', 'end');
-            }
+            var tweetScreenname = tweetview.append('text')
+                .attr('class', 'tweetpreview_screenname' + i)
+                .attr('x', margin.preview)
+                .attr('y', margin.preview + preview_fontsize)
+                .attr('font-size', preview_fontsize)
+                .style('text-anchor', 'start');
+
+            var tweetContent = tweetview.append('text')
+                .attr('class', 'tweetpreview_tweettext' + i)
+                .attr('x', 2 * margin.preview)
+                .attr('y', 2 * margin.preview + 2 * preview_fontsize)
+                .attr('font-size', preview_fontsize)
+                .style('text-anchor', 'start');
+
+            var tweetFavsAndRTs = tweetview.append('text')
+                .attr('class', 'tweetpreview_tweetfavs' + i)
+                .attr('x', container_width - margin.preview)
+                .attr('y', container_height - margin.preview + preview_fav_fontsize / 2)
+                .style('font-size', preview_fav_fontsize)
+                .style('text-anchor', 'end');
         }
 
 
@@ -153,7 +155,7 @@ const TweetView = ({tweetData, sentimentSelected}) => {
                         d3.selectAll('.tweetpreview_container' + i).style('fill', '#1da1f211');
                     }
                 })
-                .style('cursor', function (){
+                .style('cursor', function () {
                     var tweet = currentSentimentTweets[i];
                     if (tweet !== undefined) {
                         return 'pointer';
@@ -243,7 +245,7 @@ const TweetView = ({tweetData, sentimentSelected}) => {
         }
 
 
-    }, [tweetData, sentimentSelected]);
+    }, [tweetData, sentimentSelected, tweetAmountShown]);
 
     return <React.Fragment>
         <div className="TweetView" ref={divRef}/>

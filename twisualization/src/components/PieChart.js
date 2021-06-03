@@ -24,15 +24,15 @@ const PieChart = ({
         .innerRadius(innerRadius)
         .outerRadius(outerRadius);
 
+    var data;
+    var positive_counter = 0;
+    var neutral_counter = 0;
+    var negative_counter = 0;
+    var tweetCount = tweetData.length;
+
     useEffect(() => {
 
         // data preparation
-        var data;
-        var positive_counter = 0;
-        var neutral_counter = 0;
-        var negative_counter = 0;
-        var tweetCount = tweetData.length;
-
         for (let i = 0; i < tweetCount; i++) {
             var currentSentiment = tweetData[i].Sentiment_Type;
             switch (currentSentiment) {
@@ -128,9 +128,7 @@ const PieChart = ({
                     if (!isSentimentSelected) {
                         d3.selectAll('.arc').attr("opacity", 0.5);
                         d3.select(this)
-                            .attr("opacity", 1.0)
-                            .append('title')
-                            .text(d.data.value + " tweets");
+                            .attr("opacity", 1.0);
 
                         d3.selectAll('.center_text')
                             .text(d.data.fractional + " " + d.data.label);
@@ -144,12 +142,10 @@ const PieChart = ({
                     }
                 })
                 .on('click', function (event, d) {
-                    if (!isSentimentSelected){
+                    if (!isSentimentSelected) {
                         d3.selectAll('.arc').attr("opacity", 0.5);
                         d3.select(this)
-                            .attr("opacity", 1.0)
-                            .append('title')
-                            .text(d.data.value + " tweets");
+                            .attr("opacity", 1.0);
 
                         d3.selectAll('.center_text')
                             .text(d.data.fractional + " " + d.data.label);
@@ -159,9 +155,14 @@ const PieChart = ({
                         isSentimentSelected = false;
                     }
                 })
+                .append('title')
+
+            // update tooltip
+            arcs.select("title").text(function(d) {return d.value + " tweets";});
 
             // exit
             arcs.exit().remove();
+
         }
 
         function addTextAtTop() {

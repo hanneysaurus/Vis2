@@ -99,13 +99,15 @@ const TimeSlider = ({height = 180, width = 700, timeSelected, tweetData, timeste
             .attr('stroke-width', 5)
             .attr('stroke-linecap', 'round');
 
-        const text = svg.append("text")
+        const text = svg.append('text')
             .attr('class', 'label')
             .attr('x', width / 2)
             .attr('y', height / 3)
             .attr('font-size', toptext_fontsize)
             .attr('font-weight', 'bold')
-            .attr('text-anchor', 'middle')
+            .attr('text-anchor', 'middle');
+
+        svg.append('title').text('timezone UTC-5');
 
         const start = svg.append("text")
             .attr('x', margin.left)
@@ -127,9 +129,8 @@ const TimeSlider = ({height = 180, width = 700, timeSelected, tweetData, timeste
         // drag handle
         var handle = slider.append('circle').classed('handle', true)
             .attr('r', stroke_width / 2)
-            .attr('fill', '#1da1f244')
+            .attr('fill', '#c3e6fc')
             .attr('stroke', '#1da1f2');
-
 
         // bar on top with stroke = transparent and on which the drag behaviour is actually called
         d3.select(slider.node().appendChild(track.node().cloneNode())).attr('class', 'track-overlay')
@@ -172,7 +173,7 @@ const TimeSlider = ({height = 180, width = 700, timeSelected, tweetData, timeste
                 fetchData(timeSliderValue);
             }
             handle.attr('cx', xScale(x));
-            text.text(rangeValues[index].substring(0, cutoff_char) + (cutoff_char === 13 ? ":00" : ""));
+            d3.selectAll('.label').text(rangeValues[index].substring(0, cutoff_char) + (cutoff_char === 13 ? ":00" : ""));
 
         }
 

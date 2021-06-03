@@ -124,7 +124,19 @@ const BarChart = ({width = 700, height = 250, timeSelected, tweetData, timestepS
                 .attr('font-weight', 'bold')
                 .attr('text-anchor', 'middle')
                 .text(function (d) {
-                    return (days ? (i % 3 === 0 ? (i + ":00") : "") : (i % 5 === 0 ? (i + ":00") : ""));
+                    // returns :second for minutes
+                    //          hour:minute for hours
+                    //   and    hour:00 for days
+                    if (days && i % 3 === 0){
+                        return i + ":00";
+                    } else if (!days && i % 5 === 0) {
+                        if  (minute){
+                            return ":" + i;
+                        } else {
+                            return SELECTED_TIME.substring(SELECTED_TIME.length - 2, SELECTED_TIME.length) + ":" + (i < 10 ? ("0" + i) : i);
+                        }
+                    }
+                    return "";
                 });
         }
 
