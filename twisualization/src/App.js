@@ -1,5 +1,7 @@
 import './App.css';
 import {useState} from "react";
+import WordCloud from "./components/WordCloud";
+import WordCloud_old from "./components/WordCloud_old";
 import DropDown from "../src/components/DropDown.js";
 import TimeSlider from '../src/components/TimeSlider.js';
 import BarChart from './components/BarChart.js';
@@ -9,6 +11,7 @@ import stylesheet from './components/styles.scss';
 import useDebounce from '../src/hooks/useDebounce.js';
 
 import {FaTwitter} from 'react-icons/fa';
+import {keywords} from "d3/dist/package";
 
 function App() {
 
@@ -47,6 +50,10 @@ function App() {
                     <div>
                         <TimeSlider timeSelected={handleTimeSlider_Time} tweetData={handleTimeSlider_Data}
                                     timestepSelected={timestep}/>
+                    </div>
+                    <div>
+                        {/*<WordCloud_old/>*/}
+                        <WordCloud tweetData={tweets} />
                     </div>
                 </div>
                 <div style={{display: 'flex', flexDirection: 'column'}}>
