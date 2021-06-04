@@ -4,12 +4,18 @@ import React, {useEffect, useRef} from 'react';
 import {TagCloud} from 'react-tagcloud';
 import * as d3 from 'd3';
 
-const WordCloud = ({tweetData, sentimentSelected}) => {
+const WordCloud = ({tweetData, sentimentSelected, sentimentTag}) => {
 
     var SELECTED_SENTIMENT = "";
     if (sentimentSelected !== undefined) {
         SELECTED_SENTIMENT = sentimentSelected.toString().toUpperCase();
     }
+
+    var sentimentTag = "";
+
+    //const svgRef = useRef();
+    //const didMount = useRef(false);
+    //useEffect(() => {
 
     let wordHue = '';
     let strA = '';          // helper string
@@ -18,8 +24,8 @@ const WordCloud = ({tweetData, sentimentSelected}) => {
     const dataArray = [];   // contains all unique keywords and counts
     const dataArray2 = [];  // contains a limited number of keywords and counts
 
+    // builds array of keywords for selected tweets
     if (tweetData.length) {
-
         function getSentKwordArr() {
             let countJson = Object.keys(tweetData).length;  // number of json objects in scope
             for (let i = 0; i < countJson; i++) {
@@ -45,7 +51,7 @@ const WordCloud = ({tweetData, sentimentSelected}) => {
         getSentKwordArr()
 
 
-        // gets the unique words and their count from the keyword array
+        // gets the unique keywords and their count from the keyword array
         // creates a dataArray used by the word cloud
         function getCounts() {
             kwordArr.sort();
@@ -78,6 +84,7 @@ const WordCloud = ({tweetData, sentimentSelected}) => {
         getCounts();
 
 
+
         // helper function to sort an array of objects by object property (ex. value: or count:)
         function dynamicSort(property) {
             var sortOrder = 1;
@@ -94,7 +101,7 @@ const WordCloud = ({tweetData, sentimentSelected}) => {
 
         // because there could be thousands of keywords in a selected time
         // this function will make a new dataArray with a limited number of items
-        let limit = 50;
+        let limit = 30;
         dataArray.sort(dynamicSort("-count"));
 
         function limitWords() {
@@ -111,9 +118,7 @@ const WordCloud = ({tweetData, sentimentSelected}) => {
 
         limitWords()
 
-
-        //window.alert(SELECTED_SENTIMENT);
-
+        // Set color based on sentiment
         switch (SELECTED_SENTIMENT) {
             case "POSITIVE":
                 wordHue = 'green'
@@ -134,13 +139,24 @@ const WordCloud = ({tweetData, sentimentSelected}) => {
         }
 
 
+        // saves the Tag clicked by user
+        function saveTag(v){
+            sentimentTag = v;
+            window.alert('sentimentTag inside' + sentimentTag)
+            return sentimentTag;
+        }
+
+
+        //window.alert('sentimentTag outside ' + sentimentTag)
+
         return <TagCloud
             minSize={17}
             maxSize={40}
             shuffle={true}
             tags={dataArray2}
             //tags={data}
-            onClick={tag => alert(`${tag.value} : ${tag.count}`)}  // onClick, onDoubleClick, onMouseMove
+            //onClick={tag => alert(`${tag.value} : ${tag.count}`)}  // onClick, onDoubleClick, onMouseMove
+            //onClick={tag => saveTag(`${tag.value}`)}
             colorOptions={options}
             style={{
                 justifyContent: "center",
@@ -159,6 +175,12 @@ const WordCloud = ({tweetData, sentimentSelected}) => {
             No Tweets available in this time interval.
         </p>
     }
-
 }
+// , [tweetData, sentimentSelected]);
+//
+//     return <React.Fragment>
+//         <div className="WordCloud"/>
+//     </React.Fragment>;
+// };
+
 export default WordCloud;

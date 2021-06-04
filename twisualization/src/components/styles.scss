@@ -1,7 +1,7 @@
 body {
   font-family: "Helvetica Neue", sans-serif; //this is the font twitter uses
-  padding: 10px;
-  width: 1250px;
+  //padding: 10px;
+  width: 1380px;
   margin-left: auto;
   margin-right: auto;
   background-color: ghostwhite;
@@ -12,8 +12,8 @@ body {
 }
 
 .TweetView {
-  width: 425px; //height & width of box
-  height: 530px;
+  width: 520px; //height & width of box
+  height: 430px;
   display: block;
   overflow-y: scroll;
   overflow-x: hidden;

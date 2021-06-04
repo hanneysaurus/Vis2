@@ -3,7 +3,7 @@ import * as d3 from 'd3';
 import {feature} from 'topojson'
 import mappingdata from '../data/country_to_map_mapping.json';
 
-const WorldMap = ({width = 735, height = 500, tweetData}) => {
+const WorldMap = ({width = 700, height = 450, tweetData}) => {
 
     // state and ref to svg
     const svgRef = useRef();
@@ -43,7 +43,7 @@ const WorldMap = ({width = 735, height = 500, tweetData}) => {
             .attr('class', 'map');
 
         projection = d3.geoNaturalEarth1()
-            .scale(width / 6) // this parameter i really just found by trying out different values (apparently there is no way to easily compute the value one needs here)
+            .scale(width / 4.5) // this parameter i really just found by trying out different values (apparently there is no way to easily compute the value one needs here)
             .translate([width / 2, height / 2]);
 
         colorScale = d3.scaleLinear()
@@ -78,7 +78,7 @@ const WorldMap = ({width = 735, height = 500, tweetData}) => {
                     .style('fill', function (d) {
                         return 'white';
                     })
-                    .style('stroke', 'lightgrey')
+                    .style('stroke', 'dimgrey')
                     .style('stroke-width', 0.5)
                     .append('title')
                     .text(function (d) {
@@ -99,10 +99,7 @@ const WorldMap = ({width = 735, height = 500, tweetData}) => {
                         return colorScale(countryData.get(mappingdata[i].country.toUpperCase()));
                     })
             }
-
         }
-
-
     }, [tweetData]);
 
     return <React.Fragment>

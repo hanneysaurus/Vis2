@@ -1,7 +1,7 @@
 import React, {useEffect, useRef} from 'react';
 import * as d3 from 'd3';
 
-const TweetView = ({tweetData, sentimentSelected, tweetAmountShown}) => {
+const TweetView = ({tweetData, sentimentSelected, tweetAmountShown, tagSelected}) => {
 
     const divRef = useRef();
     var didMount = useRef(false);
@@ -9,8 +9,12 @@ const TweetView = ({tweetData, sentimentSelected, tweetAmountShown}) => {
     const SELECTED_SENTIMENT = sentimentSelected.toString().toUpperCase();
     const displayTweetAmount = tweetAmountShown; //TODO: display and add the amount
     // shown to the div in form of "showing X tweets with _____ sentiment"
-    //TODO: sort by number of likes or retweets
-//    https://stackoverflow.com/questions/31158902/is-it-possible-to-sort-a-es6-map-object
+    // TODO: sort by number of likes or retweets
+    // https://stackoverflow.com/questions/31158902/is-it-possible-to-sort-a-es6-map-object
+
+    const SELECTED_TAG = tagSelected;
+    //window.alert(SELECTED_TAG);
+
 
     useEffect(() => {
 
@@ -25,12 +29,36 @@ const TweetView = ({tweetData, sentimentSelected, tweetAmountShown}) => {
             }
         }
 
+        var currentSentimentTweets2 = [];
+        // if SELECTED_TAG not empty
+        if (SELECTED_TAG) {
+            // if keywords not empty
+            for (let i = 0; i < currentSentimentTweets.length; i++) {
+                if (currentSentimentTweets[i].Keywords) {
+                    var strA = currentSentimentTweets[i].Keywords;
+                    var arrayA = strA.split(",");
+                    for (let j = 0; j < arrayA.length; j++) {
+                        if (SELECTED_TAG == arrayA[j]) {
+                            currentSentimentTweets2.push(currentSentimentTweets[i]);
+                            break;
+                        }
+                    }
+                }
+            }
+        }else{
+            for (let i = 0; i < currentSentimentTweets.length; i++) {
+                currentSentimentTweets2.push(currentSentimentTweets[i]);
+            }
+        }
+
+
+
         const margin = {side: 5, top: 5, preview: 10}
 
         var div;
         var tweetview_group
         var svg_height = 500;
-        var svg_width = 400;
+        var svg_width = 490;
         var preview_fontsize = 14;
         var preview_fav_fontsize = 10;
         var preview_height = 100 + 2 * margin.side;
@@ -120,14 +148,14 @@ const TweetView = ({tweetData, sentimentSelected, tweetAmountShown}) => {
 
             d3.selectAll('.tweetpreview_container' + i)
                 .style('fill', function () {
-                    var tweet = currentSentimentTweets[i];
+                    var tweet = currentSentimentTweets2[i];
                     if (tweet !== undefined) {
                         return '#1da1f211';
                     }
                     return 'white';
                 })
                 .style('stroke', function () {
-                    var tweet = currentSentimentTweets[i];
+                    var tweet = currentSentimentTweets2[i];
                     if (tweet !== undefined) {
                         return '#1da1f2';
                     }
@@ -139,26 +167,26 @@ const TweetView = ({tweetData, sentimentSelected, tweetAmountShown}) => {
             // set onclick function of a preview that leads to the original tweet
             d3.selectAll('.tweetview' + i)
                 .on('click', function () {
-                    var tweet = currentSentimentTweets[i];
+                    var tweet = currentSentimentTweets2[i];
                     if (tweet !== undefined) {
                         var url = "http://twitter.com/" + tweet.Screen_Name + "/status/" + tweet.Tweet_ID;
                         window.open(url, "_blank");
                     }
                 })
                 .on('mouseenter', function () {
-                    var tweet = currentSentimentTweets[i];
+                    var tweet = currentSentimentTweets2[i];
                     if (tweet !== undefined) {
                         d3.selectAll('.tweetpreview_container' + i).style('fill', '#1da1f255');
                     }
                 })
                 .on('mouseleave', function () {
-                    var tweet = currentSentimentTweets[i];
+                    var tweet = currentSentimentTweets2[i];
                     if (tweet !== undefined) {
                         d3.selectAll('.tweetpreview_container' + i).style('fill', '#1da1f211');
                     }
                 })
                 .style('cursor', function () {
-                    var tweet = currentSentimentTweets[i];
+                    var tweet = currentSentimentTweets2[i];
                     if (tweet !== undefined) {
                         return 'pointer';
                     }
@@ -168,7 +196,7 @@ const TweetView = ({tweetData, sentimentSelected, tweetAmountShown}) => {
             // set text of the tweetpreview head
             d3.selectAll('.tweetpreview_fullname' + i)
                 .text(function () {
-                    var tweet = currentSentimentTweets[i];
+                    var tweet = currentSentimentTweets2[i];
                     if (tweet !== undefined) {
                         return tweet.Full_Name + (tweet.Verified === "Yes" ? " ☑" : "");
                     }
@@ -176,7 +204,7 @@ const TweetView = ({tweetData, sentimentSelected, tweetAmountShown}) => {
 
             d3.selectAll('.tweetpreview_screenname' + i)
                 .text(function () {
-                    var tweet = currentSentimentTweets[i];
+                    var tweet = currentSentimentTweets2[i];
                     if (tweet !== undefined) {
                         var string = "";
                         for (let i = 0; i < tweet.Full_Name.length; i++) {
@@ -189,7 +217,7 @@ const TweetView = ({tweetData, sentimentSelected, tweetAmountShown}) => {
             // set tweet content
             d3.selectAll('.tweetpreview_tweettext' + i)
                 .text(function () {
-                    var tweet = currentSentimentTweets[i];
+                    var tweet = currentSentimentTweets2[i];
                     if (tweet !== undefined) {
                         return tweet.Tweet_Text;//, preview_width - 2 * margin.preview);
                     }
@@ -204,7 +232,7 @@ const TweetView = ({tweetData, sentimentSelected, tweetAmountShown}) => {
             // set tweet favorizes and retweets
             d3.selectAll('.tweetpreview_tweetfavs' + i)
                 .text(function () {
-                    var tweet = currentSentimentTweets[i];
+                    var tweet = currentSentimentTweets2[i];
                     if (tweet !== undefined) {
                         return "🔁 " + tweet.Retweets + "\xa0\xa0\xa0💗‌ " + tweet.Favorites;
                     }

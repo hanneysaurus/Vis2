@@ -1,7 +1,7 @@
 import React, {useEffect, useRef} from 'react';
 import * as d3 from 'd3';
 
-const BarChart = ({height = 230, width = 700, timeSelected, tweetData, timestepSelected}) => {
+const BarChart = ({height = 300, width = 670, timeSelected, tweetData, timestepSelected}) => {
     // changed height from 230
 
     // state and ref to svg

@@ -23,6 +23,7 @@ function App() {
     const [sentiment, setSentiment] = useState("");
     const [tweetsShown, setTweetsShown] = useState(10);
     const debouncedTime = useDebounce(time, 100);
+    const[sentimentTag, setSentimentTag] = useState("");
 
     const handleTimeSlider_Time = (time) => {
         setTime(time);
@@ -44,6 +45,9 @@ function App() {
         setSentiment(sentiment);
     }
 
+    const handleSentimentTag = (sentimentTag) => {
+        setSentimentTag(sentimentTag);
+    }
 
     return (
         <div className={stylesheet}>
@@ -61,71 +65,46 @@ function App() {
                 display: 'flex',
                 flexDirection: 'column'
             }}>
-                <div style={{
-                    backgroundColor: 'white',
-                    padding: '10px',
-                    display: 'flex',
-                    flexDirection: 'row'
-                }}>
-
-                    <div style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        width: '730px',
-                        backgroundColor: 'white',
-                        padding: '10px',
+                <div style={{backgroundColor: 'white',padding: '10px',display: 'flex',  flexDirection: 'row'}}>
+                    <div style={{backgroundColor: 'white', width:'55%', display: 'flex',flexDirection: 'column',
                         marginLeft: 'auto',
                         marginRight: 'auto',
-                        marginBottom: 'auto'
                     }}>
-                        <p style={{
-                            textAlign: 'center',
-                            padding: '5px'
-                        }}>
+                        <p style={{textAlign: 'center', paddingTop: '6px'}}>
                             Select a time interval and range to view the Tweet data for this topic!
                         </p>
-                        <div style={{
-                            height: '50px',
-                            borderRadius: '25px',
-                            padding: '10px',
-                            textAlign: 'center',
-                        }}>
+                        <div style={{height: '50px',borderRadius: '25px',padding: '10px',textAlign: 'center', }}>
                             <TimestepDropDown timestepSelected={handleTimestepDropDown}/>
                         </div>
-                        <div style={{padding: '10px', marginLeft: 'auto', marginRight: 'auto'}}>
+                        <div style={{paddingTop: '20px', padding: '10px', marginLeft: 'auto', marginRight: 'auto'}}>
                             <BarChart timeSelected={debouncedTime} tweetData={tweets} timestepSelected={timestep}/>
                         </div>
-                        <div style={{
-                            backgroundColor: 'white',
-                            padding: '10px',
-                            marginLeft: 'auto',
-                            marginRight: 'auto'
-                        }}>
+                        <div style={{backgroundColor: 'white', paddingTop: '30px', paddingBottom: '50px', marginLeft: 'auto', marginRight: 'auto'}}>
                             <TimeSlider timeSelected={handleTimeSlider_Time} tweetData={handleTimeSlider_Data}
                                         timestepSelected={timestep}/>
                         </div>
-                        <div>
+                        <div style={{borderRadius: '25px', backgroundColor: 'white', paddingTop: '10px', margin: 'auto'}}>
                             <WorldMap tweetData={tweets}/>
                         </div>
                     </div>
 
 
-                    <div style={{display: 'flex', flexDirection: 'column', padding: '10px'}}>
-                        <div>
-                            <WordCloud tweetData={tweets}/>
-                        </div>
-                        <div style={{marginLeft: 'auto', marginRight: 'auto', paddingTop: '15px'}}>
+                    <div style={{backgroundColor: "white", width: '45%', display: 'flex', flexDirection: 'column', padding: '10px', paddingLeft:'30px', marginLeft: 'auto', marginRight: 'auto'}}>
+                        <div style={{backgroundColor: 'white', marginLeft: 'auto', marginRight: 'auto', paddingLeft: '10', paddingTop: '17px'}}>
                             <PieChart tweetData={tweets} sentimentSelected={handlePieChart}/>
                         </div>
-                        <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center'}}>
+                        <div style={{backgroundColor:'white', paddingTop: '45px', width: '570px', height: '270px',  alignItems: 'center', margin: 'auto', overflowY: 'hidden'}}>
+                            <WordCloud tweetData={tweets} sentimentSelected={sentiment}/>
+                        </div>
+                        <div style={{backgroundColor:'white', display: 'flex', flexDirection: 'row',marginLeft: 'auto', marginRight: 'auto', paddingTop: '10px'}}>
                             <p>Choose the amount of tweets shown:</p>
-                            <div style={{paddingLeft: '10px', paddingTop: '15px'}}>
+                            <div style={{paddingTop: '15px'}}>
                                 <TweetviewDropDown tweetAmountShown={handleTweetviewDropDown}/>
                             </div>
                         </div>
-                        <div style={{padding: '5px', marginLeft: 'auto', marginRight: 'auto'}}>
+                        <div style={{backgroundColor:'white', paddingTop: '10px', marginLeft: 'auto', marginRight: 'auto', justifyContent: 'center'}}>
                             <TweetView id="tweetpreviewcontainer" tweetData={tweets} sentimentSelected={sentiment}
-                                       tweetAmountShown={tweetsShown}/>
+                                       tweetAmountShown={tweetsShown} tagSelected={sentimentTag}/>
                         </div>
                     </div>
                 </div>

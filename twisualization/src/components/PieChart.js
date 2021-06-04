@@ -7,11 +7,11 @@ const transitionDuration = 100;
 /** PieChart component that updates everytime a prop changes with a transition animation, takes in a list of data + other optional props
  data prop format example: [{ label: 'FirstObj', color: 'red', value: 1 }, { label: 'SecondObj', color: 'blue', value: 1 }] */
 const PieChart = ({
-                      width = 270, height = 270, tweetData, sentimentSelected
+                      width = 300, height = 300, tweetData, sentimentSelected
                   }) => {
 
-    const outerRadius = 100;
-    const innerRadius = outerRadius / 2.7; // 3
+    const outerRadius = 110;
+    const innerRadius = outerRadius / 2.5; // 3
     const fontsize = 16;
     const center_fontsize = 14;
     var isSentimentSelected = false;
@@ -92,7 +92,7 @@ const PieChart = ({
                     .append('g')
                     .attr('transform', 'translate(' + height / 2 + ' ' + width / 2 + ')')
                     .classed('piechart_canvas', true)
-                    .style('cursor', 'pointer');
+                    .style('cursor', 'pointer')
                 addTextAtTop();
 
                 // container for arcs
@@ -121,6 +121,7 @@ const PieChart = ({
                 .attr("stroke", "black")
                 .attr("opacity", 1.0)
                 .attr("stroke-opacity", 0.1)
+                .attr("stroke-width", "3px")
                 .each(function (d) {
                     this._current = d;
                 })
@@ -174,7 +175,7 @@ const PieChart = ({
             top_text
                 .enter().append('text')
                 .attr('x', width / 2)
-                .attr('y', (height - 2 * outerRadius) / 2 - fontsize)
+                .attr('y', (height - 2 * outerRadius) / 2.7 - fontsize)
                 .attr('class', 'top_text')
                 .style('text-anchor', 'middle')
                 .style('font-size', fontsize)
