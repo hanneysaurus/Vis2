@@ -17,8 +17,8 @@ const WordCloud = ({tweetData}) => {
         function getKwordArr() {
             let countJson = Object.keys(tweetData).length;  // number of json objects in scope
             for (let i = 0; i < countJson; i++) {
-                if (tweetData[i].keywords) {
-                    strA = tweetData[i].keywords;
+                if (tweetData[i].Keywords) {
+                    strA = tweetData[i].Keywords;
                     arrayA = strA.split(",");
                     kwordArr = kwordArr.concat(arrayA);
                 }
