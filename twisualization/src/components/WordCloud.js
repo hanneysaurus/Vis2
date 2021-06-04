@@ -1,10 +1,14 @@
 //on twisualization level npm install react-tagcloud
 
-import React, {} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {TagCloud} from 'react-tagcloud';
+import * as d3 from 'd3';
 
-const WordCloud = ({tweetData}) => {
+const WordCloud = ({tweetData, sentimentSelected}) => {
 
+    const SELECTED_SENTIMENT = sentimentSelected.toString().toUpperCase();
+
+    let wordHue = '';
     let strA = '';          // helper string
     let arrayA = [];        // helper array
     let kwordArr = [];      // list of all keywords in selected tweet range
@@ -13,18 +17,30 @@ const WordCloud = ({tweetData}) => {
 
     if (tweetData.length) {
 
-        // combines all keywords from multiple tweets of a selected time into one array
-        function getKwordArr() {
+        function getSentKwordArr() {
             let countJson = Object.keys(tweetData).length;  // number of json objects in scope
             for (let i = 0; i < countJson; i++) {
-                if (tweetData[i].keywords) {
-                    strA = tweetData[i].keywords;
-                    arrayA = strA.split(",");
-                    kwordArr = kwordArr.concat(arrayA);
+                var currentSentiment = tweetData[i].Sentiment_Type;
+                if (SELECTED_SENTIMENT == "") {
+                    //window.alert(SELECTED_SENTIMENT + ' ' + i + ' ' + tweetData[i].Tweet_ID);
+                    if (tweetData[i].keywords) {
+                        strA = tweetData[i].keywords;
+                        arrayA = strA.split(",");
+                        kwordArr = kwordArr.concat(arrayA);
+                    }
+                } else if (currentSentiment === SELECTED_SENTIMENT) {
+                    //window.alert(SELECTED_SENTIMENT + ' ' + i + ' ' + tweetData[i].Tweet_ID);
+                    if (tweetData[i].keywords) {
+                        strA = tweetData[i].keywords;
+                        arrayA = strA.split(",");
+                        kwordArr = kwordArr.concat(arrayA);
+                    }
                 }
             }
         }
-        getKwordArr()
+
+        getSentKwordArr()
+
 
         // gets the unique words and their count from the keyword array
         // creates a dataArray used by the word cloud
@@ -55,25 +71,29 @@ const WordCloud = ({tweetData}) => {
                 dataArray.push(word);
             }
         }
+
         getCounts();
+
 
         // helper function to sort an array of objects by object property (ex. value: or count:)
         function dynamicSort(property) {
             var sortOrder = 1;
-            if(property[0] === "-") {
+            if (property[0] === "-") {
                 sortOrder = -1;
                 property = property.substr(1);
             }
-            return function (a,b) {
+            return function (a, b) {
                 var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
                 return result * sortOrder;
             }
         }
 
+
         // because there could be thousands of keywords in a selected time
         // this function will make a new dataArray with a limited number of items
         let limit = 50;
         dataArray.sort(dynamicSort("-count"));
+
         function limitWords() {
             if (limit < dataArray.length) {
                 for (let i = 0; i < limit; i++) {
@@ -85,11 +105,31 @@ const WordCloud = ({tweetData}) => {
                 }
             }
         }
+
         limitWords()
 
-        // window.alert('kwordArr.length: ' + kwordArr.length);      // all unique keywords in selection
-        // window.alert('dataArray.length: ' + dataArray.length);    // unique keywords and their counts
-        // window.alert('dataArray2.length: ' + dataArray2.length);  // unique keywords with count > limit
+
+        //window.alert(SELECTED_SENTIMENT);
+
+        switch (SELECTED_SENTIMENT) {
+            case "POSITIVE":
+                wordHue = 'green'
+                break;
+            case "NEGATIVE":
+                wordHue = 'red'
+                break;
+            case "NEUTRAL":
+                wordHue = 'blue'
+                break;
+            case "":
+                wordHue = 'blue'
+                break;
+        }
+        const options = {
+            luminosity: 'bright',
+            hue: wordHue,
+        }
+
 
         return <TagCloud
             minSize={17}
@@ -98,16 +138,17 @@ const WordCloud = ({tweetData}) => {
             tags={dataArray2}
             //tags={data}
             onClick={tag => alert(`${tag.value} : ${tag.count}`)}  // onClick, onDoubleClick, onMouseMove
-            colorOptions={{hue: 'blue', luminosity: 'bright'}}
+            colorOptions={options}
             style={{
                 justifyContent: "center",
                 alignItems: "center",
                 textAlign: 'center',
                 fontFamily: 'sans-serif',
-                fontWeight: 'normal',   //bold
-                fontStyle: 'normal',    //italic
-                padding: 10,            //Padding between tags (px)
-                flex: 1
+                fontWeight: 'bold',      //bold
+                fontStyle: 'normal',     //italic
+                //padding: 5,              //Padding between tags (px)
+                width: '100%',
+                height: '100%'
             }}
         />
     } else {
@@ -116,5 +157,5 @@ const WordCloud = ({tweetData}) => {
         </p>
     }
 
-};
+}
 export default WordCloud;

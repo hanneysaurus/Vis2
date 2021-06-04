@@ -98,10 +98,10 @@ const TweetView = ({tweetData, sentimentSelected}) => {
 
         switch (SELECTED_SENTIMENT) {
             case "POSITIVE":
-                divRef.current.style.borderColor = 'lightgreen';
+                divRef.current.style.borderColor = 'mediumaquamarine'; // lightgreen
                 break;
             case "NEUTRAL":
-                divRef.current.style.borderColor = 'cornsilk';
+                divRef.current.style.borderColor = 'lightgrey'; // cornsilk
                 break;
             case "NEGATIVE":
                 divRef.current.style.borderColor = 'lightcoral';
