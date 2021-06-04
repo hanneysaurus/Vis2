@@ -10,7 +10,7 @@ import stylesheet from "../src/components/styles.scss";
 import useDebounce from "../src/hooks/useDebounce.js";
 
 import {FaTwitter} from 'react-icons/fa';
-import {keywords} from "d3/dist/package";
+//import {keywords} from "d3/dist/package";
 
 function App() {
 
