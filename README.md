@@ -1,10 +1,14 @@
-change to the twisualization directory:
-cd twisualization
+## Instructions to Run the Program
 
-install the following:
-npm install
-npm install react-tagcloud
-npm i topojson-server
+Open the project in a javascript IDE, like WebStorm.
 
-run the program:
-npm start
+Change to the "twisualization" directory:  
+* cd twisualization  
+  
+Install the following:  
+* npm install  
+* npm install react-tagcloud  
+* npm i topojson-server  
+  
+Run the program:  
+* npm start  
