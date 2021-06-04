@@ -48,6 +48,8 @@ const TweetView = ({tweetData, sentimentSelected, tweetAmountShown}) => {
 
         for (let i = 0; i < displayTweetAmount; i++) {
 
+            console.log("Hello")
+
             // tweet preview
             var tweetview = tweetview_group.append('svg')
                 .attr('class', 'tweetview' + i)
@@ -103,7 +105,7 @@ const TweetView = ({tweetData, sentimentSelected, tweetAmountShown}) => {
                 divRef.current.style.borderColor = 'lightgreen';
                 break;
             case "NEUTRAL":
-                divRef.current.style.borderColor = 'cornsilk';
+                divRef.current.style.borderColor = 'floralwhite';
                 break;
             case "NEGATIVE":
                 divRef.current.style.borderColor = 'lightcoral';

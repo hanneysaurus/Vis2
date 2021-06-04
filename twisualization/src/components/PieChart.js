@@ -7,11 +7,11 @@ const transitionDuration = 100;
 /** PieChart component that updates everytime a prop changes with a transition animation, takes in a list of data + other optional props
  data prop format example: [{ label: 'FirstObj', color: 'red', value: 1 }, { label: 'SecondObj', color: 'blue', value: 1 }] */
 const PieChart = ({
-                      width = 300, height = 300, tweetData, sentimentSelected
+                      width = 270, height = 270, tweetData, sentimentSelected
                   }) => {
 
     const outerRadius = 100;
-    const innerRadius = outerRadius / 3;
+    const innerRadius = outerRadius / 2.7; // 3
     const fontsize = 16;
     const center_fontsize = 14;
     var isSentimentSelected = false;
@@ -74,7 +74,7 @@ const PieChart = ({
         addTextInCenter();
 
         d3.selectAll('.top_text')
-            .text('sentiment distribution of ' + tweetCount + ' tweets');
+            .text('Sentiment Distribution of ' + tweetCount + ' Tweets');
 
         didMount.current = true;
 
@@ -126,7 +126,7 @@ const PieChart = ({
                 })
                 .on('mouseenter', function (event, d) {
                     if (!isSentimentSelected) {
-                        d3.selectAll('.arc').attr("opacity", 0.5);
+                        d3.selectAll('.arc').attr("opacity", 0.3);  // changed from 0.5
                         d3.select(this)
                             .attr("opacity", 1.0);
 
@@ -142,8 +142,8 @@ const PieChart = ({
                     }
                 })
                 .on('click', function (event, d) {
-                    if (!isSentimentSelected) {
-                        d3.selectAll('.arc').attr("opacity", 0.5);
+                    if (!isSentimentSelected){
+                        d3.selectAll('.arc').attr("opacity", 0.3);
                         d3.select(this)
                             .attr("opacity", 1.0);
 

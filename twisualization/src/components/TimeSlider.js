@@ -2,7 +2,8 @@ import React, {useRef, useEffect, useState} from 'react';
 import * as d3 from 'd3';
 import rawdata from '../data/Oscars17.json';
 
-const TimeSlider = ({height = 180, width = 700, timeSelected, tweetData, timestepSelected}) => {
+const TimeSlider = ({height = 120, width = 700, timeSelected, tweetData, timestepSelected}) => {
+                    // changed height from 180
 
     var range = [];
     const SELECTED_TIMESTEP = timestepSelected;
@@ -102,7 +103,7 @@ const TimeSlider = ({height = 180, width = 700, timeSelected, tweetData, timeste
         const text = svg.append('text')
             .attr('class', 'label')
             .attr('x', width / 2)
-            .attr('y', height / 3)
+            .attr('y', height / 4)  // changed from 3 to raise the text a little
             .attr('font-size', toptext_fontsize)
             .attr('font-weight', 'bold')
             .attr('text-anchor', 'middle');
