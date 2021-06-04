@@ -2,6 +2,7 @@ import './App.css';
 import {useState} from "react";
 import TimestepDropDown from "./components/TimestepDropDown.js";
 import TweetviewDropDown from "./components/TweetviewDropDown.js";
+import WordCloud from "./components/WordCloud";
 import TimeSlider from '../src/components/TimeSlider.js';
 import BarChart from './components/BarChart.js';
 import PieChart from "./components/PieChart.js";
@@ -10,8 +11,7 @@ import stylesheet from './components/styles.scss';
 import useDebounce from '../src/hooks/useDebounce.js';
 
 import {FaTwitter} from 'react-icons/fa';
-import {FaInfoCircle} from 'react-icons/fa'
-import {FaInfo} from 'react-icons/fa'
+import {FaInfo} from 'react-icons/fa';
 
 function App() {
 
@@ -64,6 +64,9 @@ function App() {
                     <div>
                         <TimeSlider timeSelected={handleTimeSlider_Time} tweetData={handleTimeSlider_Data}
                                     timestepSelected={timestep}/>
+                    </div>
+                    <div>
+                        <WordCloud tweetData={tweets} />
                     </div>
                 </div>
 

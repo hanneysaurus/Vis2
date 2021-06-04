@@ -1,0 +1,112 @@
+ctr,country,id
+AFE,Africa East,#NULL!
+AFW,Africa West,#NULL!
+ALB,Albania,008
+ALG,Algeria,012
+AND,Andorra,#NULL!
+ARA,Arab countries,784
+ARG,Argentina,032
+ARM,Armenia,051
+AUL,Australia,036
+AUT,Austria,040
+AZE,Azerbaijan,031
+BAN,Bangladesh,050
+BLR,Belarus,112
+BEL,Belgium,056
+BEF,Belgium French,056
+BEN,Belgium Netherl,056
+BOS,Bosnia,070
+BRA,Brazil,076
+BUL,Bulgaria,100
+BUF,Burkina Faso,854
+CAN,Canada,124
+CAF,Canada French,124
+CHL,Chile,152
+CHI,China,156
+COL,Colombia,170
+COS,Costa Rica,188
+CRO,Croatia,191
+CYP,Cyprus,196
+CZE,Czech Rep,203
+DEN,Denmark,208
+DOM,Dominican Rep,180
+ECA,Ecuador,218
+EGY,Egypt,818
+ETH,Ethiopia,231
+SAL,El Salvador,222
+EST,Estonia,233
+FIN,Finland,246
+FRA,France,250
+GEO,Georgia,268
+GER,Germany,276
+GEE,Germany East,276
+GHA,Ghana,288
+GBR,Great Britain,826
+GRE,Greece,300
+GUA,Guatemala,320
+HOK,Hong Kong,#NULL!
+HUN,Hungary,348
+ICE,Iceland,352
+IND,India,356
+IDO,Indonesia,360
+IRA,Iran,364
+IRQ,Iraq,368
+IRE,Ireland,372
+ISR,Israel,376
+ITA,Italy,380
+JAM,Jamaica,388
+JPN,Japan,392
+JOR,Jordan,275
+KOR,Korea South,410
+KYR,Kyrgyz Rep,417
+LAT,Latvia,428
+LIT,Lithuania,440
+LUX,Luxembourg,442
+MAC,Macedonia Rep,807
+MAL,Malaysia,458
+MLI,Mali,466
+MLT,Malta,#NULL!
+MEX,Mexico,484
+MOL,Moldova,498
+MNG,Montenegro,499
+MOR,Morocco,504
+NET,Netherlands,528
+NZL,New Zealand,554
+NIG,Nigeria,566
+NOR,Norway,578
+PAK,Pakistan,586
+PAN,Panama,591
+PER,Peru,604
+PHI,Philippines,608
+POL,Poland,616
+POR,Portugal,620
+PUE,Puerto Rico,630
+ROM,Romania,642
+RUS,Russia,643
+RWA,Rwanda,646
+SAU,Saudi Arabia,682
+SER,Serbia,688
+SIN,Singapore,
+SLK,Slovak Rep,703
+SLV,Slovenia,705
+SAF,South Africa,710
+SAW,South Africa white,710
+SPA,Spain,724
+SUR,Suriname,740
+SWE,Sweden,752
+SWI,Switzerland,756
+SWF,Switzerland French,756
+SWG,Switzerland German,756
+TAI,Taiwan,158
+TAN,Tanzania,834
+THA,Thailand,764
+TRI,Trinidad and Tobago,780
+TUR,Turkey,792
+USA,U.S.A.,840
+UGA,Uganda,800
+UKR,Ukraine,804
+URU,Uruguay,858
+VEN,Venezuela,862
+VIE,Vietnam,704
+ZAM,Zambia,894
+ZIM,Zimbabwe,716
