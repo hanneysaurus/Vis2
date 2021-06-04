@@ -7,6 +7,8 @@ import TimeSlider from '../src/components/TimeSlider.js';
 import BarChart from './components/BarChart.js';
 import PieChart from "./components/PieChart.js";
 import TweetView from "./components/TweetView.js";
+import WorldMap from "./components/WorldMap.js";
+
 import stylesheet from './components/styles.scss';
 import useDebounce from '../src/hooks/useDebounce.js';
 
@@ -71,6 +73,9 @@ function App() {
                 </div>
 
                 <div style={{display: 'flex', flexDirection: 'column'}}>
+                    <div>
+                        <WorldMap tweetData={tweets}/>
+                    </div>
                     <div style={{display: 'flex', flexDirection: 'row'}}>
                         <div style={{paddingTop: '50px'}}>
                             <PieChart tweetData={tweets} sentimentSelected={handlePieChart}/>

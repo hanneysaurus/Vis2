@@ -13,6 +13,7 @@
     "react-scripts": "4.0.3",
     "react-tagcloud": "^2.1.1",
     "sass": "^1.32.12",
+    "topojson": "^3.0.2",
     "web-vitals": "^1.1.1"
   },
   "scripts": {
