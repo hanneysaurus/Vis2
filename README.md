@@ -7,6 +7,7 @@ Change to the "twisualization" directory:
   
 Install the following:  
 * npm install  
+* npm i react
 * npm install react-tagcloud  
 * npm i topojson-server  
   
