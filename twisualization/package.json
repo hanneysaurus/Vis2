@@ -1,5 +1,6 @@
 {
   "name": "twisualization",
+  "homepage": "https://hanneysaurus.github.io/Twisualization",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
