@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: WorldMap.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: WorldMap.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, {useEffect, useRef} from 'react';
+import * as d3 from 'd3';
+import {feature} from 'topojson'
+import mappingdata from '../data/country_to_map_mapping.json';
+
+/**
+ * creates the worldmap using d3 and topojson
+ * displays the amount of tweets per country with a linear gradient scale
+ * @param width
+ * @param height
+ * @param tweetData
+ * @returns {JSX.Element}
+ * @constructor
+ * @author Hannah Bayat
+ */
+const WorldMap = ({width = 700, height = 450, tweetData}) => {
+
+    // state and ref to svg
+    const svgRef = useRef();
+    var didMount = useRef(false);
+
+    var svg;
+    var projection;
+    var colorScale;
+    var pathGenerator;
+
+    var countryData = new Map([]);
+
+    // code runs only if data has been fetched
+    useEffect(() => {
+
+        for (let i = 0; i &lt; tweetData.length; i++) {
+            var currentCountry = tweetData[i].Country.toUpperCase();
+            if (countryData.has(currentCountry)) {
+                countryData.set(currentCountry, countryData.get(currentCountry) + 1);
+            } else {
+                countryData.set(currentCountry, 1);
+            }
+        }
+
+        var max_tweets = 0;
+        var countryArray = Array.from(countryData.values());
+        for (let i = 0; i &lt; countryArray.length; i++) {
+            var currentTweetcount = countryArray[i];
+            if (currentTweetcount > max_tweets) {
+                max_tweets = currentTweetcount;
+            }
+        }
+
+        svg = d3.select(svgRef.current)
+            .attr('width', width)
+            .attr('height', height)
+            .attr('class', 'map');
+
+        projection = d3.geoNaturalEarth1()
+            .scale(width / 4.5) // this parameter i really just found by trying out different values (apparently there is no way to easily compute the value one needs here)
+            .translate([width / 2, height / 2]);
+
+        colorScale = d3.scaleLinear()
+            .domain([0, max_tweets])
+            .range(['#ffffff', '#1da1f2'])
+
+        pathGenerator = d3.geoPath().projection(projection);
+
+        if (!didMount) {
+            svg.append('path')
+                .attr('class', 'sphere')
+                .attr('d', pathGenerator({type: 'Sphere'}))
+                .attr('fill', '#1da1f222');
+        }
+
+        // WHAT HAPPENED TO AFGHANISTAN AND ANGOLA????
+        d3.json("https://unpkg.com/world-atlas@1/world/110m.json")
+            .then(data => {
+                const countries = feature(data, data.objects.countries);
+                svg.selectAll('path')
+                    .data(countries.features)
+                    .enter().append('path')
+                    .attr('d', pathGenerator)
+                    .attr('class', function (d) {
+                        for (let i = 0; i &lt; mappingdata.length; i++) {
+                            if (mappingdata[i].id === d.id) {
+                                return mappingdata[i].country.toUpperCase();
+                            }
+                        }
+                        return d.id
+                    })
+                    .style('fill', function (d) {
+                        return 'white';
+                    })
+                    .style('stroke', 'dimgrey')
+                    .style('stroke-width', 0.5)
+                    .append('title')
+                    .text(function (d) {
+                        for (let i = 0; i &lt; mappingdata.length; i++) {
+                            if (mappingdata[i].id === d.id) {
+                                return mappingdata[i].country.toUpperCase();
+                            }
+                        }
+                        return d.id
+                    })
+            });
+
+        for (let i = 0; i &lt; mappingdata.length; i++) {
+
+            if (countryData.has(mappingdata[i].country.toUpperCase())) {
+                svg.selectAll('.' + mappingdata[i].country.toUpperCase())
+                    .style('fill', function () {
+                        return colorScale(countryData.get(mappingdata[i].country.toUpperCase()));
+                    })
+            }
+        }
+    }, [tweetData]);
+
+    return &lt;React.Fragment>
+        &lt;svg className="WorldMap" height={height} width={width} ref={svgRef}/>
+    &lt;/React.Fragment>;
+};
+
+export default WorldMap;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="WorldMap.html">WorldMap</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Tue Jun 22 2021 15:52:31 GMT+0200 (Central European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
