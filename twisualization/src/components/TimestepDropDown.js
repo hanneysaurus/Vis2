@@ -1,6 +1,14 @@
 import React, {useEffect, useRef, useState} from 'react';
 import * as d3 from 'd3';
 
+/**
+ * creates the dropdown for the user to choose the timestep (days, hours or minutes)
+ * and sets the variable timestepSelected
+ * @param timestepSelected
+ * @returns {JSX.Element}
+ * @constructor
+ * @author Hannah Bayat
+ */
 const TimestepDropDown = ({timestepSelected}) => {
 
     const svgRef = useRef();

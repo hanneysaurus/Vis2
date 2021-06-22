@@ -4,8 +4,17 @@ import * as d3 from 'd3';
 // time for transition between state changes in milliseconds
 const transitionDuration = 100;
 
-/** PieChart component that updates everytime a prop changes with a transition animation, takes in a list of data + other optional props
- data prop format example: [{ label: 'FirstObj', color: 'red', value: 1 }, { label: 'SecondObj', color: 'blue', value: 1 }] */
+/**
+ * PieChart creates the Piechart component with the specified width and height. When the tweetData gets updated it changes its data and looks.
+ * Outputs the selected sentiment that is passed on to the other components.
+ * @param width
+ * @param height
+ * @param tweetData
+ * @param sentimentSelected
+ * @returns {JSX.Element}
+ * @constructor
+ * @author Hannah Bayat
+ */
 const PieChart = ({
                       width = 300, height = 300, tweetData, sentimentSelected
                   }) => {
@@ -80,6 +89,9 @@ const PieChart = ({
 
 
         //----- FUNCTION DEFINITIONS -------------------------------------------------------------------------//
+        /**
+         * setupContainersonMount is called once to set up the initial parts of the piechart
+         */
         function setupContainersOnMount() {
             const svg = d3.select(svgRef.current);
 
@@ -100,7 +112,9 @@ const PieChart = ({
             }
         }
 
-        /** uses enter() and exit() to redraw the piechart every time props change with transitions */
+        /**
+         * drawPieChart() uses enter() and exit() to redraw the piechart every time props change with transitions
+         * */
         function drawPieChart() {
             var arcs = d3.select('.arcs').selectAll("path").data(pie(data));
 
@@ -166,6 +180,9 @@ const PieChart = ({
 
         }
 
+        /**
+         * addTextAtTop() sets the text on top of the piechart (title)
+         */
         function addTextAtTop() {
             let top_text = d3.select('.piechart_outer_svg')
                 .selectAll('.top_text')
@@ -184,6 +201,9 @@ const PieChart = ({
             top_text.exit().remove();
         }
 
+        /**
+         * addTextInCenter() sets the text on top of the piechart (title)
+         */
         function addTextInCenter() {
             let center_text = d3.select('.piechart_outer_svg')
                 .selectAll('.center_text')

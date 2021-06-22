@@ -1,6 +1,17 @@
 import React, {useEffect, useRef} from 'react';
 import * as d3 from 'd3';
 
+/**
+ * shows the chosen amount of tweets (in the dropdown) for a certain sentiment (sentimentSelected) in the piechart at a certain time
+ * selected in the timeslider
+ * @param tweetData
+ * @param sentimentSelected
+ * @param tweetAmountShown
+ * @param tagSelected
+ * @returns {JSX.Element}
+ * @constructor
+ * @author Hannah Bayat
+ */
 const TweetView = ({tweetData, sentimentSelected, tweetAmountShown, tagSelected}) => {
 
     const divRef = useRef();
@@ -243,8 +254,12 @@ const TweetView = ({tweetData, sentimentSelected, tweetAmountShown, tagSelected}
 
         didMount.current = true;
 
-        // function for linebreaking
-        // adapted from https://bl.ocks.org/mbostock/7555321
+        /**
+         * puts linebreaks in the text for the tweets such that it looks like a tweet
+         * adapted from https://bl.ocks.org/mbostock/7555321
+         * @param text
+         * @param width
+         */
         function wrap(text, width) {
             text.each(function () {
                 var text = d3.select(this),

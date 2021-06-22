@@ -3,6 +3,16 @@ import * as d3 from 'd3';
 import {feature} from 'topojson'
 import mappingdata from '../data/country_to_map_mapping.json';
 
+/**
+ * creates the worldmap using d3 and topojson
+ * displays the amount of tweets per country with a linear gradient scale
+ * @param width
+ * @param height
+ * @param tweetData
+ * @returns {JSX.Element}
+ * @constructor
+ * @author Hannah Bayat
+ */
 const WorldMap = ({width = 700, height = 450, tweetData}) => {
 
     // state and ref to svg

@@ -1,6 +1,17 @@
 import React, {useEffect, useRef} from 'react';
 import * as d3 from 'd3';
 
+/**
+ * BarChart creates the barchart displaying the amount of tweets within the chosen interval at the chosen time
+ * @param height
+ * @param width
+ * @param timeSelected
+ * @param tweetData
+ * @param timestepSelected
+ * @returns {JSX.Element}
+ * @constructor
+ * @author Hannah Bayat
+ */
 const BarChart = ({height = 300, width = 670, timeSelected, tweetData, timestepSelected}) => {
     // changed height from 230
 

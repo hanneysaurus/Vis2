@@ -2,6 +2,18 @@ import React, {useRef, useEffect, useState} from 'react';
 import * as d3 from 'd3';
 import rawdata from '../data/Oscars17.json';
 
+/**
+ * TimeSlider creates the timeslider component that lets the user choose the time they want to analyze
+ * outputs the selected time
+ * @param height
+ * @param width
+ * @param timeSelected
+ * @param tweetData
+ * @param timestepSelected
+ * @returns {JSX.Element}
+ * @constructor
+ * @author Hannah Bayat
+ */
 const TimeSlider = ({height = 120, width = 670, timeSelected, tweetData, timestepSelected}) => {
                     // changed height from 180
 
@@ -154,6 +166,10 @@ const TimeSlider = ({height = 120, width = 670, timeSelected, tweetData, timeste
         // set default year to max value, corresponds to 27/02/2017 23:59:00
         dragged(170, range);
 
+        /**
+         * gets called every time the ball on the timeslider is being dragged to retrieve the time value chosen
+         * @param value
+         */
         function dragged(value) {
 
             var x = xScale.invert(value),
@@ -178,6 +194,10 @@ const TimeSlider = ({height = 120, width = 670, timeSelected, tweetData, timeste
 
         }
 
+        /**
+         * fetches the data from the total dataset for the chosen time and time-interval and sets the data (tweetData)
+         * @param timeSliderValue
+         */
         function fetchData(timeSliderValue){
 
             var tweets = [];

@@ -1,6 +1,14 @@
 import React, {useEffect, useRef, useState} from 'react';
 import * as d3 from 'd3';
 
+/**
+ * creates the dropdown for the user to choose the amount of tweets to be shown in the tweetview (10, 50 or 100)
+ * and sets the variable tweetAmountShown
+ * @param tweetAmountShown
+ * @returns {JSX.Element}
+ * @constructor
+ * @author Hannah Bayat
+ */
 const TweetviewDropDown = ({tweetAmountShown}) => {
 
     const svgRef = useRef();
