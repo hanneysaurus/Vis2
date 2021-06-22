@@ -4,6 +4,14 @@ import React, {useEffect, useRef} from 'react';
 import {TagCloud} from 'react-tagcloud';
 import * as d3 from 'd3';
 
+/**
+ *
+ * @param tweetData
+ * @param sentimentSelected
+ * @param sentimentTag
+ * @returns {JSX.Element}
+ * @constructor
+ */
 const WordCloud = ({tweetData, sentimentSelected, sentimentTag}) => {
 
     var SELECTED_SENTIMENT = "";
@@ -13,6 +21,7 @@ const WordCloud = ({tweetData, sentimentSelected, sentimentTag}) => {
 
     var sentimentTag = "";
 
+    // UNUSED
     //const svgRef = useRef();
     //const didMount = useRef(false);
     //useEffect(() => {
@@ -24,8 +33,13 @@ const WordCloud = ({tweetData, sentimentSelected, sentimentTag}) => {
     const dataArray = [];   // contains all unique keywords and counts
     const dataArray2 = [];  // contains a limited number of keywords and counts
 
-    // builds array of keywords for selected tweets
+
     if (tweetData.length) {
+
+        /**
+         * This builds an array of keywords for selected tweets
+         *
+         */
         function getSentKwordArr() {
             let countJson = Object.keys(tweetData).length;  // number of json objects in scope
             for (let i = 0; i < countJson; i++) {
@@ -47,12 +61,13 @@ const WordCloud = ({tweetData, sentimentSelected, sentimentTag}) => {
                 }
             }
         }
-
         getSentKwordArr()
 
-
-        // gets the unique keywords and their count from the keyword array
-        // creates a dataArray used by the word cloud
+        /**
+         * This function gets the unique keywords and their count from the keyword array
+         * It creates a dataArray used by the TagCloud
+         *
+         */
         function getCounts() {
             kwordArr.sort();
             let currentWord = null;
@@ -80,12 +95,14 @@ const WordCloud = ({tweetData, sentimentSelected, sentimentTag}) => {
                 dataArray.push(word);
             }
         }
-
         getCounts();
 
-
-
-        // helper function to sort an array of objects by object property (ex. value: or count:)
+        /**
+         * This is a helper function to sort an array of objects by object property (ex. value: or count:)
+         *
+         * @param property
+         * @returns {function(*, *)}
+         */
         function dynamicSort(property) {
             var sortOrder = 1;
             if (property[0] === "-") {
@@ -97,14 +114,16 @@ const WordCloud = ({tweetData, sentimentSelected, sentimentTag}) => {
                 return result * sortOrder;
             }
         }
-
-
-        // because there could be thousands of keywords in a selected time
-        // this function will make a new dataArray with a limited number of items
-        let limit = 30;
         dataArray.sort(dynamicSort("-count"));
 
+        /**
+         * This function will make a new dataArray with a limited number of items (up to 'limit')
+         * This is necessary because there might be thousands of keywords in a selected time
+         *
+         * @type {number}
+         */
         function limitWords() {
+            let limit = 30;
             if (limit < dataArray.length) {
                 for (let i = 0; i < limit; i++) {
                     dataArray2.push(dataArray[i])
@@ -115,10 +134,9 @@ const WordCloud = ({tweetData, sentimentSelected, sentimentTag}) => {
                 }
             }
         }
-
         limitWords()
 
-        // Set color based on sentiment
+        // This sets the TagCloud color based on selected sentiment
         switch (SELECTED_SENTIMENT) {
             case "POSITIVE":
                 wordHue = 'green'
@@ -138,17 +156,16 @@ const WordCloud = ({tweetData, sentimentSelected, sentimentTag}) => {
             hue: wordHue,
         }
 
-
-        // saves the Tag clicked by user
+        // UNUSED
+        // This function saves the Tag clicked by user
         function saveTag(v){
             sentimentTag = v;
-            window.alert('sentimentTag inside' + sentimentTag)
+            // window.alert('sentimentTag inside' + sentimentTag) // for testing
             return sentimentTag;
         }
+        //window.alert('sentimentTag outside ' + sentimentTag)  // for testing
 
-
-        //window.alert('sentimentTag outside ' + sentimentTag)
-
+        // This returns the React TagCloud
         return <TagCloud
             minSize={17}
             maxSize={40}
@@ -176,6 +193,8 @@ const WordCloud = ({tweetData, sentimentSelected, sentimentTag}) => {
         </p>
     }
 }
+
+// UNUSED
 // , [tweetData, sentimentSelected]);
 //
 //     return <React.Fragment>
